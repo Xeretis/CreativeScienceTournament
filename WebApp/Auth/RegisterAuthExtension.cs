@@ -1,5 +1,7 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
+using WebApp.Auth.Requirements;
 using WebApp.Data;
 using WebApp.Data.Entities;
 
@@ -23,6 +25,23 @@ public static class RegisterAuthExtension
             };
         });
 
+        services.AddAuthorization(o =>
+        {
+            o.AddPolicy("EmailConfirmed", policy =>
+            {
+                policy.RequireAuthenticatedUser();
+                policy.Requirements.Add(new EmailRequirement(true));
+            });
+            o.AddPolicy("EmailUnconfirmed", policy =>
+            {
+                policy.RequireAuthenticatedUser();
+                policy.Requirements.Add(new EmailRequirement(false));
+            });
+            o.AddPolicy("EmailAny", policy => policy.RequireAuthenticatedUser());
+
+            o.DefaultPolicy = o.GetPolicy("EmailConfirmed")!;
+        });
+
         var core = services.AddIdentityCore<ApiUser>(options =>
         {
             options.User.RequireUniqueEmail = true;
@@ -38,6 +57,8 @@ public static class RegisterAuthExtension
         builder.AddEntityFrameworkStores<ApplicationDbContext>().AddRoles<IdentityRole>()
             .AddSignInManager<SignInManager<ApiUser>>()
             .AddDefaultTokenProviders();
+
+        builder.Services.AddScoped<IAuthorizationHandler, EmailRequirementHandler>();
 
         return services;
     }

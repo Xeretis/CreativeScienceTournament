@@ -104,7 +104,7 @@ public class AuthController : Controller
         return NoContent();
     }
 
-    [Authorize]
+    [Authorize("EmailUnconfirmed")]
     [HttpPost("ResendEmailConfirmation")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     public async Task<ActionResult> ResendEmailConfirmation([FromQuery] string confirmUrl)
@@ -118,7 +118,7 @@ public class AuthController : Controller
         return NoContent();
     }
 
-    [Authorize]
+    [Authorize("EmailAny")]
     [HttpGet("User")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult<UserResponse>> GetUser()
@@ -131,7 +131,7 @@ public class AuthController : Controller
         return Ok(response);
     }
 
-    [Authorize]
+    [Authorize("EmailAny")]
     [HttpDelete("Logout")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     public async Task<ActionResult> Logout()
