@@ -53,4 +53,14 @@ app.MapControllerRoute(
 
 app.MapFallbackToFile("index.html");
 
+try
+{
+    await AuthSeeder.SeedRoles(app.Services);
+    await AuthSeeder.SeedAdmin(app.Services, builder.Configuration);
+}
+catch (Exception error)
+{
+    Console.WriteLine("Error seeding roles and admin: " + error.Message);
+}
+
 app.Run();
