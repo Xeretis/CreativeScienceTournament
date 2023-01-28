@@ -3,7 +3,7 @@ using Sieve.Models;
 using Sieve.Services;
 using WebApp.Data.Entities;
 
-namespace WebApp.Support.Sorting;
+namespace WebApp.Support.Sieve;
 
 public class CustomSieveProcessor : SieveProcessor
 {

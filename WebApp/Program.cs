@@ -1,19 +1,29 @@
 using System.Text.Json.Serialization;
+using Hangfire;
 using Microsoft.OpenApi.Models;
+using RazorEmails.Services;
 using WebApp.Auth;
 using WebApp.Data;
 using WebApp.Services;
 using WebApp.Support.Auth;
-using WebApp.Support.Sorting;
+using WebApp.Support.Hangfire;
+using WebApp.Support.Mail;
+using WebApp.Support.Sieve;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddRazorPages();
+
 builder.Services.RegisterAuthSupport();
-builder.Services.RegisterSortingSupport();
+builder.Services.RegisterSieveSupport();
+builder.Services.RegisterMailSupport(builder.Configuration);
+builder.Services.RegisterHangfireSupport(builder.Configuration.GetConnectionString("DefaultConnection"));
+
 
 builder.Services.RegisterPersistence(builder.Configuration.GetConnectionString("DefaultConnection"));
 builder.Services.RegisterAuth();
-builder.Services.RegisterServices();
+builder.Services.RegisterWebAppServices();
+builder.Services.RegisterRazorEmailsServices();
 
 builder.Services.AddSwaggerGen(c => { c.SwaggerDoc("v1", new OpenApiInfo { Title = "WebApp", Version = "v1" }); });
 
@@ -22,7 +32,6 @@ builder.Services.AddMemoryCache();
 
 builder.Services.AddControllers().AddJsonOptions(x =>
     x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
-;
 
 var app = builder.Build();
 
@@ -38,6 +47,7 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
+    app.UseHangfireDashboard();
 }
 
 app.UseStaticFiles();
@@ -56,14 +66,7 @@ app.MapControllerRoute(
 
 app.MapFallbackToFile("index.html");
 
-try
-{
-    await AuthSeeder.SeedRoles(app.Services);
-    await AuthSeeder.SeedAdmin(app.Services, builder.Configuration);
-}
-catch (Exception error)
-{
-    Console.WriteLine("Error seeding roles and admin: " + error.Message);
-}
+await AuthSeeder.SeedRoles(app.Services);
+await AuthSeeder.SeedAdmin(app.Services, builder.Configuration);
 
 app.Run();

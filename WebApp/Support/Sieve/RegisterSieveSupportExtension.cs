@@ -1,10 +1,10 @@
 using Sieve.Services;
 
-namespace WebApp.Support.Sorting;
+namespace WebApp.Support.Sieve;
 
-public static class RegisterSortingSupportExtension
+public static class RegisterSieveSupportExtension
 {
-    public static void RegisterSortingSupport(this IServiceCollection services)
+    public static void RegisterSieveSupport(this IServiceCollection services)
     {
         services.AddScoped<ISieveCustomSortMethods, CustomSieveSortMethods>();
         services.AddScoped<ISieveProcessor, CustomSieveProcessor>();

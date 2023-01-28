@@ -1,0 +1,22 @@
+@using RazorEmails.Views.Shared
+@model RazorEmails.Views.Emails.ConfirmAccount.ConfirmEmailAddressViewModel
+
+@{
+    ViewData["EmailTitle"] = "Üdvözlunk a KTTV-n!";
+}
+
+<p>
+    Örülünk, hogy csatlakoztál a KTTV-hez! Ahhoz, hogy a KTTV-t használni tudj, először meg kell erősítened az e-mail címed.
+</p>
+
+@await Html.PartialAsync("EmailButton", new EmailButtonViewModel { Text = "E-mail megerősítése", Url = Model.ConfirmEmailUrl })
+
+<p>
+    Amennyiben nem te regisztráltál a KTTV-n, akkor kérlek hagyd figyelmen kívül ezt az e-mailt.
+</p>
+
+<br/>
+
+<p>
+    A KTTV csapata
+</p>

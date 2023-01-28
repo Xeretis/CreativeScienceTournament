@@ -5,9 +5,10 @@ namespace WebApp.Services;
 
 public static class RegisterServicesExtension
 {
-    public static IServiceCollection RegisterServices(this IServiceCollection services)
+    public static IServiceCollection RegisterWebAppServices(this IServiceCollection services)
     {
         services.AddScoped<IAuthService, AuthService>();
+        services.AddSingleton<IMailService, MailService>();
         return services;
     }
 }

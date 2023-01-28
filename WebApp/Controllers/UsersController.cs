@@ -1,4 +1,6 @@
+using System.Net;
 using AutoMapper;
+using Hangfire;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -7,6 +9,7 @@ using Sieve.Models;
 using Sieve.Services;
 using WebApp.Data;
 using WebApp.Data.Entities;
+using WebApp.Jobs.Definitions;
 using WebApp.Models.Requests;
 using WebApp.Models.Responses;
 using WebApp.Support.Auth;
@@ -18,18 +21,20 @@ namespace WebApp.Controllers;
 [Produces("application/json")]
 public class UsersController : Controller
 {
+    private readonly IBackgroundJobClient _backgroundJobClient;
     private readonly ApplicationDbContext _dbContext;
     private readonly IMapper _mapper;
     private readonly ISieveProcessor _sieveProcessor;
     private readonly UserManager<ApiUser> _userManager;
 
     public UsersController(ApplicationDbContext dbContext, IMapper mapper, ISieveProcessor sieveProcessor,
-        UserManager<ApiUser> userManager)
+        UserManager<ApiUser> userManager, IBackgroundJobClient backgroundJobClient)
     {
         _dbContext = dbContext;
         _mapper = mapper;
         _sieveProcessor = sieveProcessor;
         _userManager = userManager;
+        _backgroundJobClient = backgroundJobClient;
     }
 
     [HttpGet]
@@ -59,7 +64,7 @@ public class UsersController : Controller
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<ActionResult> CreateUser([FromBody] CreateUserRequest request)
+    public async Task<ActionResult> CreateUser([FromQuery] string confirmUrl, CreateUserRequest request)
     {
         var user = _mapper.Map<ApiUser>(request);
 
@@ -86,6 +91,10 @@ public class UsersController : Controller
 
             return ValidationProblem();
         }
+
+        var confirmationToken = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+        var completeConfirmUrl = $"{confirmUrl}?userId={user.Id}&token={WebUtility.UrlEncode(confirmationToken)}";
+        _backgroundJobClient.Enqueue<SendEmailConfirmationJob>(j => j.Run(user, completeConfirmUrl));
 
         return NoContent();
     }

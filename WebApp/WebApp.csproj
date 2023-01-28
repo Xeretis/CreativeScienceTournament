@@ -17,9 +17,11 @@
 
     <ItemGroup>
         <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.0" />
+        <PackageReference Include="Hangfire.AspNetCore" Version="1.7.32" />
+        <PackageReference Include="Hangfire.Core" Version="1.7.32" />
+        <PackageReference Include="Hangfire.PostgreSql" Version="1.9.9" />
+        <PackageReference Include="MailKit" Version="3.4.3" />
         <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="7.0.2" />
-        <PackageReference Include="Microsoft.AspNetCore.Mvc.Versioning" Version="5.0.0" />
-        <PackageReference Include="Microsoft.AspNetCore.Mvc.Versioning.ApiExplorer" Version="5.0.0" />
         <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="7.0.2" />
         <PackageReference Include="Microsoft.AspNetCore.SpaProxy" Version="7.0.1" />
         <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.2" />
@@ -27,6 +29,7 @@
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
+        <PackageReference Include="MimeKit" Version="3.4.3" />
         <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="7.0.1" />
         <PackageReference Include="Sieve" Version="2.5.5" />
         <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
@@ -1383,10 +1386,10 @@
     </Target>
 
 
-    <Target Name="OpenAPI" AfterTargets="Build" Condition="$(Configuration)=='Debug'">
-        <Exec Command="dotnet swagger tofile --output $(SpaRoot)src/api/schema/v1/schema.yaml --yaml $(OutputPath)$(AssemblyName).dll v1" WorkingDirectory="$(ProjectDir)" />
-        <Exec Command="dotnet swagger tofile --output $(SpaRoot)src/api/schema/v1/schema.json $(OutputPath)$(AssemblyName).dll v1" WorkingDirectory="$(ProjectDir)" />
-    </Target>
+    <!--    <Target Name="OpenAPI" AfterTargets="Build" Condition="$(Configuration)=='Debug'">-->
+    <!--        <Exec Command="dotnet swagger tofile &#45;&#45;output $(SpaRoot)src/api/schema/v1/schema.yaml &#45;&#45;yaml $(OutputPath)$(AssemblyName).dll v1" WorkingDirectory="$(ProjectDir)"/>-->
+    <!--        <Exec Command="dotnet swagger tofile &#45;&#45;output $(SpaRoot)src/api/schema/v1/schema.json $(OutputPath)$(AssemblyName).dll v1" WorkingDirectory="$(ProjectDir)"/>-->
+    <!--    </Target>-->
 
     <Target Name="PublishRunWebpack" AfterTargets="ComputeFilesToPublish">
         <!-- As part of publishing, ensure the JS resources are freshly built in production mode -->
