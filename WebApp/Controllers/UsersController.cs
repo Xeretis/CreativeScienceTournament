@@ -92,7 +92,9 @@ public class UsersController : Controller
 
         await _authService.SendConfirmationEmailAsync(user, confirmUrl);
 
-        return NoContent();
+        var response = _mapper.Map<ViewUserResponse>(user);
+
+        return CreatedAtAction(nameof(ViewUser), new { id = user.Id }, response);
     }
 
     [Authorize]

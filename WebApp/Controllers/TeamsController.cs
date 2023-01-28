@@ -146,11 +146,13 @@ public class TeamsController : Controller
     {
         var targetUser = await _dbContext.Users.Where(u => u.EmailConfirmed).Include(u => u.Team)
             .FirstOrDefaultAsync(u => u.Id == userId);
+
         if (targetUser == null) return NotFound();
         if (targetUser.Team != null) return BadRequest(new { Message = "Ez a felhaználó már rendelkezik csapattal" });
 
         var user = await _dbContext.Users.Include(u => u.Team).ThenInclude(t => t.Members)
             .FirstOrDefaultAsync(u => u.Id == User.GetId());
+
         if (user.Team == null) return BadRequest(new { Message = "Nem rendelkezel csapattal" });
         if (user.Team.Members.Count >= 3) return BadRequest(new { Message = "A csapatban már 3 tag van" });
         if (user.Team.CreatorId != user.Id) return Forbid();
