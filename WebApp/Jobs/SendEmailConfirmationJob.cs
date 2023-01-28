@@ -4,7 +4,7 @@ using WebApp.Data.Entities;
 using WebApp.Services.Interfaces;
 using WebApp.Support.Mail;
 
-namespace WebApp.Jobs.Definitions;
+namespace WebApp.Jobs;
 
 public class SendEmailConfirmationJob
 {

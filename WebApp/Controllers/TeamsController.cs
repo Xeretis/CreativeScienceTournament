@@ -8,6 +8,7 @@ using WebApp.Data;
 using WebApp.Data.Entities;
 using WebApp.Models.Requests;
 using WebApp.Models.Responses;
+using WebApp.Services.Interfaces;
 using WebApp.Support.Auth;
 
 namespace WebApp.Controllers;
@@ -21,12 +22,15 @@ public class TeamsController : Controller
     private readonly ApplicationDbContext _dbContext;
     private readonly IMapper _mapper;
     private readonly ISieveProcessor _sieveProcessor;
+    private readonly ITeamService _teamService;
 
-    public TeamsController(ApplicationDbContext dbContext, IMapper mapper, ISieveProcessor sieveProcessor)
+    public TeamsController(ApplicationDbContext dbContext, IMapper mapper, ISieveProcessor sieveProcessor,
+        ITeamService teamService)
     {
         _dbContext = dbContext;
         _mapper = mapper;
         _sieveProcessor = sieveProcessor;
+        _teamService = teamService;
     }
 
     [AllowAnonymous]
@@ -63,7 +67,7 @@ public class TeamsController : Controller
     {
         var user = await _dbContext.Users.Include(u => u.Team).FirstOrDefaultAsync(u => u.Id == User.GetId());
 
-        if (user.Team != null) return BadRequest(new { Message = "Ez a felhaználó már rendelkezik csapattal!" });
+        if (user.Team != null) return BadRequest(new { Message = "Mér rendelkezel csapattal" });
 
         var team = _mapper.Map<Team>(request);
         team.CreatorId = User.GetId()!;
@@ -123,13 +127,35 @@ public class TeamsController : Controller
     {
         var user = await _dbContext.Users.Include(u => u.Team).FirstOrDefaultAsync(u => u.Id == User.GetId());
 
-        if (user.Team == null) return BadRequest(new { Message = "Ez a felhaználó nem rendelkezik csapattal" });
+        if (user.Team == null) return BadRequest(new { Message = "Nem vagy tagja csapatnak" });
 
         if (user.Team.CreatorId == user.Id)
             return BadRequest(new { Message = "A csapat létrehozója nem hagyhatja el a csapatot" });
 
         user.Team = null;
         await _dbContext.SaveChangesAsync();
+
+        return NoContent();
+    }
+
+    [HttpPost("Invite/{userId}")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<ActionResult> InviteUser(string userId, [FromQuery] string inviteUrl)
+    {
+        var targetUser = await _dbContext.Users.Where(u => u.EmailConfirmed).Include(u => u.Team)
+            .FirstOrDefaultAsync(u => u.Id == userId);
+        if (targetUser == null) return NotFound();
+        if (targetUser.Team != null) return BadRequest(new { Message = "Ez a felhaználó már rendelkezik csapattal" });
+
+        var user = await _dbContext.Users.Include(u => u.Team).ThenInclude(t => t.Members)
+            .FirstOrDefaultAsync(u => u.Id == User.GetId());
+        if (user.Team == null) return BadRequest(new { Message = "Nem rendelkezel csapattal" });
+        if (user.Team.Members.Count >= 3) return BadRequest(new { Message = "A csapatban már 3 tag van" });
+        if (user.Team.CreatorId != user.Id) return Forbid();
+
+        _teamService.SendInviteEmail(user.Team, targetUser, inviteUrl, user.UserName);
 
         return NoContent();
     }

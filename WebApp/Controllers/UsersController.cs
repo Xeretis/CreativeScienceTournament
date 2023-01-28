@@ -38,7 +38,7 @@ public class UsersController : Controller
     [HttpGet]
     public async Task<ActionResult<IEnumerable<IndexUsersResponse>>> IndexUsers([FromQuery] SieveModel sieveModel)
     {
-        var users = _dbContext.Users.AsNoTracking();
+        var users = _dbContext.Users.Where(u => u.EmailConfirmed).AsNoTracking();
         var filteredUsers = await _sieveProcessor.Apply(sieveModel, users).ToListAsync();
 
         var response = _mapper.Map<IEnumerable<IndexUsersResponse>>(filteredUsers);
@@ -50,7 +50,7 @@ public class UsersController : Controller
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<ViewUserResponse>> ViewUser(string id)
     {
-        var user = await _dbContext.Users.FindAsync(id);
+        var user = await _dbContext.Users.Where(u => u.EmailConfirmed).FirstOrDefaultAsync(u => u.Id == id);
 
         if (user == null) return NotFound();
 
@@ -90,7 +90,7 @@ public class UsersController : Controller
             return ValidationProblem();
         }
 
-        await _authService.SendConfirmationEmail(user, confirmUrl);
+        await _authService.SendConfirmationEmailAsync(user, confirmUrl);
 
         return NoContent();
     }

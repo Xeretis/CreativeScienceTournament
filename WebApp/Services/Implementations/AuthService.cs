@@ -3,7 +3,7 @@ using System.Security.Claims;
 using Hangfire;
 using Microsoft.AspNetCore.Identity;
 using WebApp.Data.Entities;
-using WebApp.Jobs.Definitions;
+using WebApp.Jobs;
 using WebApp.Services.Interfaces;
 
 namespace WebApp.Services.Implementations;
@@ -35,7 +35,7 @@ public class AuthService : IAuthService
         return authClaims;
     }
 
-    public async Task SendConfirmationEmail(ApiUser user, string confirmUrl)
+    public async Task SendConfirmationEmailAsync(ApiUser user, string confirmUrl)
     {
         var confirmationToken = await _userManager.GenerateEmailConfirmationTokenAsync(user);
         var completeConfirmUrl = $"{confirmUrl}?userId={user.Id}&token={WebUtility.UrlEncode(confirmationToken)}";

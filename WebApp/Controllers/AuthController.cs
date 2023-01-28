@@ -110,7 +110,7 @@ public class AuthController : Controller
     {
         var user = await _userManager.FindByIdAsync(User.GetId());
 
-        await _authService.SendConfirmationEmail(user, confirmUrl);
+        await _authService.SendConfirmationEmailAsync(user, confirmUrl);
 
         return NoContent();
     }

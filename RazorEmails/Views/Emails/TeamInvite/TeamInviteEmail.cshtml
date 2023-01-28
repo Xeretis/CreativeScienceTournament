@@ -1,0 +1,22 @@
+@using RazorEmails.Views.Shared
+@model RazorEmails.Views.Emails.TeamInvite.TeamInviteEmailViewModel
+
+@{
+    ViewData["EmailTitle"] = "Meghívót kaptál egy csapatba!";
+}
+
+<p>
+    <b>@Model.InviterName</b> meghívott a <b>@Model.TeamName</b> csapatba.
+</p>
+
+@await Html.PartialAsync("EmailButton", new EmailButtonViewModel { Text = "Meghívó elfogadása", Url = Model.InviteUrl })
+
+<p>
+    Amennyiben nem szeretnél csatlakozni a csapatba, kérlek hagyd figyelmen kívül ezt az e-mailt.
+</p>
+
+<br/>
+
+<p>
+    A KTTV csapata
+</p>
