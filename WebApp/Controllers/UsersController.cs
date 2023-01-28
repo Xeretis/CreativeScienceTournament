@@ -1,6 +1,4 @@
-using System.Net;
 using AutoMapper;
-using Hangfire;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -9,9 +7,9 @@ using Sieve.Models;
 using Sieve.Services;
 using WebApp.Data;
 using WebApp.Data.Entities;
-using WebApp.Jobs.Definitions;
 using WebApp.Models.Requests;
 using WebApp.Models.Responses;
+using WebApp.Services.Interfaces;
 using WebApp.Support.Auth;
 
 namespace WebApp.Controllers;
@@ -21,20 +19,20 @@ namespace WebApp.Controllers;
 [Produces("application/json")]
 public class UsersController : Controller
 {
-    private readonly IBackgroundJobClient _backgroundJobClient;
+    private readonly IAuthService _authService;
     private readonly ApplicationDbContext _dbContext;
     private readonly IMapper _mapper;
     private readonly ISieveProcessor _sieveProcessor;
     private readonly UserManager<ApiUser> _userManager;
 
     public UsersController(ApplicationDbContext dbContext, IMapper mapper, ISieveProcessor sieveProcessor,
-        UserManager<ApiUser> userManager, IBackgroundJobClient backgroundJobClient)
+        UserManager<ApiUser> userManager, IAuthService authService)
     {
         _dbContext = dbContext;
         _mapper = mapper;
         _sieveProcessor = sieveProcessor;
         _userManager = userManager;
-        _backgroundJobClient = backgroundJobClient;
+        _authService = authService;
     }
 
     [HttpGet]
@@ -92,9 +90,7 @@ public class UsersController : Controller
             return ValidationProblem();
         }
 
-        var confirmationToken = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-        var completeConfirmUrl = $"{confirmUrl}?userId={user.Id}&token={WebUtility.UrlEncode(confirmationToken)}";
-        _backgroundJobClient.Enqueue<SendEmailConfirmationJob>(j => j.Run(user, completeConfirmUrl));
+        await _authService.SendConfirmationEmail(user, confirmUrl);
 
         return NoContent();
     }

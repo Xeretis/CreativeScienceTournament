@@ -8,7 +8,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using WebApp.Data.Entities;
-using WebApp.Jobs.Definitions;
 using WebApp.Models.Requests;
 using WebApp.Models.Responses;
 using WebApp.Services.Interfaces;
@@ -111,9 +110,7 @@ public class AuthController : Controller
     {
         var user = await _userManager.FindByIdAsync(User.GetId());
 
-        var confirmationToken = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-        var completeConfirmUrl = $"{confirmUrl}?userId={user.Id}&token={WebUtility.UrlEncode(confirmationToken)}";
-        _backgroundJobClient.Enqueue<SendEmailConfirmationJob>(j => j.Run(user, completeConfirmUrl));
+        await _authService.SendConfirmationEmail(user, confirmUrl);
 
         return NoContent();
     }
