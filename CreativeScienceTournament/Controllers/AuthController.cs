@@ -104,6 +104,7 @@ public class AuthController : Controller
             });
 
         var userResponse = _mapper.Map<LoginResponseUser>(user);
+        userResponse.Roles = authClaims.Where(c => c.Type == ClaimTypes.Role).Select(c => c.Value).ToList();
 
         return Ok(new LoginResponse
         {

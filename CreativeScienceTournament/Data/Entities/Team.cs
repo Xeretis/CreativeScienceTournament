@@ -1,11 +1,19 @@
 using System.ComponentModel.DataAnnotations;
+using Sieve.Attributes;
 
 namespace CreativeScienceTournament.Data.Entities;
 
 public class Team : BaseEntity
 {
-    [Key] public int Id { get; set; }
-    [Required] public string Name { get; set; }
+    [Sieve(CanFilter = true, CanSort = true)]
+    [Key]
+    public int Id { get; set; }
+
+    [Sieve(CanFilter = true, CanSort = true)]
+    [Required]
+    public string Name { get; set; }
+
+    [Required] public string CreatorId { get; set; }
 
     public List<ApiUser> Members { get; set; }
     public List<Contest> Contests { get; set; }

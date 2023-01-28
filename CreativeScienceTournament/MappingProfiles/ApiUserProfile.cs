@@ -13,5 +13,7 @@ public class ApiUserProfile : Profile
 
         CreateMap<ApiUser, LoginResponseUser>();
         CreateMap<ApiUser, UserResponse>();
+        CreateMap<ApiUser, ViewTeamResponseUser>();
+        CreateMap<ApiUser, IndexTeamResponseUser>();
     }
 }
