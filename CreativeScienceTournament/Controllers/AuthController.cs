@@ -33,40 +33,6 @@ public class AuthController : Controller
         _userManager = userManager;
     }
 
-    [HttpPost("Register")]
-    [ProducesResponseType(StatusCodes.Status204NoContent)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<ActionResult> Register([FromBody] RegisterRequest request)
-    {
-        var user = _mapper.Map<ApiUser>(request);
-
-        var result = await _userManager.CreateAsync(user, request.Password);
-
-        if (!result.Succeeded)
-        {
-            foreach (var error in result.Errors)
-                switch (error.Code)
-                {
-                    case "DuplicateUserName":
-                        ModelState.AddModelError("Ez a felhasználónév már foglalt", error.Description);
-                        break;
-                    case "DuplicateEmail":
-                        ModelState.AddModelError("Ez az e-mail már foglalt", error.Description);
-                        break;
-                    case "PasswordTooShort":
-                        ModelState.AddModelError(nameof(request.Password), error.Description);
-                        break;
-                    default:
-                        ModelState.AddModelError(nameof(request.UserName), error.Description);
-                        break;
-                }
-
-            return ValidationProblem();
-        }
-
-        return NoContent();
-    }
-
     [HttpPost("Login")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]

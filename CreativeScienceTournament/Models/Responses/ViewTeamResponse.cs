@@ -6,6 +6,7 @@ public class ViewTeamResponse
 
     public string Name { get; set; }
     public int Points { get; set; }
+    public string OwnerId { get; set; }
 
     public IEnumerable<ViewTeamResponseUser> Members { get; set; }
 

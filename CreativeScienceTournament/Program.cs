@@ -5,7 +5,6 @@ using CreativeScienceTournament.Services;
 using CreativeScienceTournament.Support.Auth;
 using CreativeScienceTournament.Support.Sorting;
 using Microsoft.OpenApi.Models;
-using Sieve.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,7 +21,6 @@ builder.Services.AddSwaggerGen(c =>
 });
 
 builder.Services.AddAutoMapper(typeof(Program));
-builder.Services.AddScoped<SieveProcessor>();
 builder.Services.AddMemoryCache();
 
 builder.Services.AddControllers().AddJsonOptions(x =>

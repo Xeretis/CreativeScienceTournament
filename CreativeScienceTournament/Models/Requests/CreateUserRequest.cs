@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace CreativeScienceTournament.Models.Requests;
 
-public class RegisterRequest
+public class CreateUserRequest
 {
     [Required] public string Email { get; set; }
     [Required] public string UserName { get; set; }
@@ -13,7 +13,7 @@ public class RegisterRequest
     public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
     {
         if (Password != ConfirmPassword)
-            yield return new ValidationResult("Passwords do not match",
+            yield return new ValidationResult("A megadott jelszavak nem egyeznek",
                 new[] { nameof(Password), nameof(ConfirmPassword) });
     }
 }

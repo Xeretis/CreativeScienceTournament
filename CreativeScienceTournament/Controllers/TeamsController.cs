@@ -20,9 +20,9 @@ public class TeamsController : Controller
 {
     private readonly ApplicationDbContext _dbContext;
     private readonly IMapper _mapper;
-    private readonly SieveProcessor _sieveProcessor;
+    private readonly ISieveProcessor _sieveProcessor;
 
-    public TeamsController(ApplicationDbContext dbContext, IMapper mapper, SieveProcessor sieveProcessor)
+    public TeamsController(ApplicationDbContext dbContext, IMapper mapper, ISieveProcessor sieveProcessor)
     {
         _dbContext = dbContext;
         _mapper = mapper;
@@ -31,11 +31,10 @@ public class TeamsController : Controller
 
     [AllowAnonymous]
     [HttpGet]
-    [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult<IEnumerable<IndexTeamResponse>>> IndexTeams([FromQuery] SieveModel sieveModel)
     {
         var teams = _dbContext.Teams.Include(t => t.PointEntries).Include(t => t.Members).AsNoTracking();
-        var filteredTeams = _sieveProcessor.Apply(sieveModel, teams);
+        var filteredTeams = await _sieveProcessor.Apply(sieveModel, teams).ToListAsync();
 
         var response = _mapper.Map<IEnumerable<IndexTeamResponse>>(filteredTeams);
 
@@ -44,7 +43,6 @@ public class TeamsController : Controller
 
     [AllowAnonymous]
     [HttpGet("{id}")]
-    [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<ViewTeamResponse>> ViewTeam([FromRoute] int id)
     {
@@ -113,6 +111,24 @@ public class TeamsController : Controller
             return Forbid();
 
         _dbContext.Teams.Remove(team);
+        await _dbContext.SaveChangesAsync();
+
+        return NoContent();
+    }
+
+    [HttpPost("Leave")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<ActionResult> LeaveTeam()
+    {
+        var user = await _dbContext.Users.Include(u => u.Team).FirstOrDefaultAsync(u => u.Id == User.GetId());
+
+        if (user.Team == null) return BadRequest(new { Message = "Ez a felhaználó nem rendelkezik csapattal" });
+
+        if (user.Team.CreatorId == user.Id)
+            return BadRequest(new { Message = "A csapat létrehozója nem hagyhatja el a csapatot" });
+
+        user.Team = null;
         await _dbContext.SaveChangesAsync();
 
         return NoContent();
