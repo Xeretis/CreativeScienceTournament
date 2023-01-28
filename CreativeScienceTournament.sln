@@ -1,6 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CreativeScienceTournament", "CreativeScienceTournament\CreativeScienceTournament.csproj", "{2FAC5AB0-4551-4F1B-9DBD-6E8CEE05A529}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApp", "WebApp\WebApp.csproj", "{2FAC5AB0-4551-4F1B-9DBD-6E8CEE05A529}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RazorEmails", "RazorEmails\RazorEmails.csproj", "{2201D006-F320-408A-A2B2-53CCDE0EC7B6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -12,5 +14,9 @@ Global
 		{2FAC5AB0-4551-4F1B-9DBD-6E8CEE05A529}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2FAC5AB0-4551-4F1B-9DBD-6E8CEE05A529}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2FAC5AB0-4551-4F1B-9DBD-6E8CEE05A529}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2201D006-F320-408A-A2B2-53CCDE0EC7B6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2201D006-F320-408A-A2B2-53CCDE0EC7B6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2201D006-F320-408A-A2B2-53CCDE0EC7B6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2201D006-F320-408A-A2B2-53CCDE0EC7B6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
