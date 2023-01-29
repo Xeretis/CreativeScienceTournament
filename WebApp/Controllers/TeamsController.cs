@@ -1,3 +1,4 @@
+using System.Net;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -158,6 +159,31 @@ public class TeamsController : Controller
         if (user.Team.CreatorId != user.Id) return Forbid();
 
         _teamService.SendInviteEmail(user.Team, targetUser, inviteUrl, user.UserName);
+
+        return NoContent();
+    }
+
+    [HttpPost("Join")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<ActionResult> JoinTeam([FromQuery] string token)
+    {
+        var tokenContent = _teamService.ReadInviteToken(WebUtility.UrlDecode(token));
+
+        if (tokenContent == null) return BadRequest(new { Message = "Érvénytelen token" });
+
+        var user = await _dbContext.Users.Include(u => u.Team)
+            .FirstOrDefaultAsync(u => u.Id == tokenContent.Value.Item2);
+        if (user == null) return NotFound();
+        if (user.Team != null) return BadRequest(new { Message = "Már rendelkezel csapattal" });
+
+        var team = _dbContext.Teams.Include(t => t.Members).FirstOrDefault(t => t.Id == tokenContent.Value.Item1);
+        if (team == null) return NotFound();
+        if (team.Members.Count >= 3) return BadRequest(new { Message = "A csapatban már 3 tag van" });
+
+        user.Team = team;
+        await _dbContext.SaveChangesAsync();
 
         return NoContent();
     }
