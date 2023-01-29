@@ -1,5 +1,6 @@
 using System.Text.Json.Serialization;
 using Hangfire;
+using Microsoft.Extensions.FileProviders;
 using Microsoft.OpenApi.Models;
 using RazorEmails.Services;
 using WebApp.Auth;
@@ -51,6 +52,12 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseStaticFiles();
+app.UseStaticFiles(new StaticFileOptions
+{
+    FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), @"Resources/Images")),
+    RequestPath = new PathString("/Images")
+});
+
 app.UseRouting();
 
 app.UseRouting();

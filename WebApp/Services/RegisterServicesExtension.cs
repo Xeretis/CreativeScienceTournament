@@ -10,6 +10,7 @@ public static class RegisterServicesExtension
         services.AddScoped<IAuthService, AuthService>();
         services.AddSingleton<IMailService, MailService>();
         services.AddScoped<ITeamService, TeamService>();
+        services.AddScoped<IContestService, ContestService>();
         return services;
     }
 }

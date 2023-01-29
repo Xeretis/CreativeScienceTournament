@@ -1,20 +1,34 @@
 using System.ComponentModel.DataAnnotations;
+using Sieve.Attributes;
 using WebApp.Data.Entities.Owned;
 
 namespace WebApp.Data.Entities;
 
 public class Contest : BaseEntity
 {
-    [Key] public int Id { get; set; }
-    [Required] public string Topic { get; set; }
-    [Required] public string Description { get; set; }
+    [Sieve(CanFilter = true, CanSort = true)]
+    [Key]
+    public int Id { get; set; }
+
+    [Sieve(CanFilter = true, CanSort = true)]
+    [Required]
+    public string Topic { get; set; }
+
+    [Sieve(CanFilter = true, CanSort = true)]
+    [Required]
+    public string Description { get; set; }
 
     [Required] public Exercise Exercise { get; set; }
 
     [Required] public int MaxPoints { get; set; }
 
-    [Required] public DateTime StartDate { get; set; }
-    [Required] public DateTime EndDate { get; set; }
+    [Sieve(CanFilter = true, CanSort = true)]
+    [Required]
+    public DateTime StartDate { get; set; }
+
+    [Sieve(CanFilter = true, CanSort = true)]
+    [Required]
+    public DateTime EndDate { get; set; }
 
     public string? ThumbnailUrl { get; set; }
 

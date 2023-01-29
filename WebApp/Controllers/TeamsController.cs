@@ -36,12 +36,12 @@ public class TeamsController : Controller
 
     [AllowAnonymous]
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<IndexTeamResponse>>> IndexTeams([FromQuery] SieveModel sieveModel)
+    public async Task<ActionResult<IEnumerable<IndexTeamsResponse>>> IndexTeams([FromQuery] SieveModel sieveModel)
     {
         var teams = _dbContext.Teams.Include(t => t.PointEntries).Include(t => t.Members).AsNoTracking();
         var filteredTeams = await _sieveProcessor.Apply(sieveModel, teams).ToListAsync();
 
-        var response = _mapper.Map<IEnumerable<IndexTeamResponse>>(filteredTeams);
+        var response = _mapper.Map<IEnumerable<IndexTeamsResponse>>(filteredTeams);
 
         return Ok(response);
     }

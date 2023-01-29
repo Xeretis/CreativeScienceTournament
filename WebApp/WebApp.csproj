@@ -1369,6 +1369,8 @@
         <Folder Include="ClientApp\src\api\client" />
         <Folder Include="ClientApp\src\api\schema\v1" />
         <Folder Include="Migrations" />
+        <Folder Include="Resources\Exercises" />
+        <Folder Include="Resources\Images" />
     </ItemGroup>
 
     <ItemGroup>

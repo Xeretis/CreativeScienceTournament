@@ -1,6 +1,6 @@
 namespace WebApp.Models.Responses;
 
-public class IndexTeamResponse
+public class IndexTeamsResponse
 {
     public int Id { get; set; }
     public string Name { get; set; }
