@@ -126,12 +126,16 @@ public class TeamsController : Controller
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<ActionResult> LeaveTeam()
     {
-        var user = await _dbContext.Users.Include(u => u.Team).FirstOrDefaultAsync(u => u.Id == User.GetId());
+        var user = await _dbContext.Users.Include(u => u.Team).ThenInclude(t => t.Contests)
+            .FirstOrDefaultAsync(u => u.Id == User.GetId());
 
         if (user.Team == null) return BadRequest(new { Message = "Nem vagy tagja csapatnak" });
 
         if (user.Team.CreatorId == user.Id)
             return BadRequest(new { Message = "A csapat létrehozója nem hagyhatja el a csapatot" });
+
+        if (user.Team.Contests.Any(c => c.EndDate > DateTime.Now))
+            return BadRequest(new { Message = "Aktív verseny közben nem hagyhatod el a csapatod" });
 
         user.Team = null;
         await _dbContext.SaveChangesAsync();
