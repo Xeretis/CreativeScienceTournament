@@ -52,11 +52,14 @@ public class ContestsController : Controller
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<ViewContestResponse>> ViewContest([FromRoute] int id)
     {
-        var contest = await _dbContext.Contests.AsNoTracking().FirstOrDefaultAsync(c => c.Id == id);
+        var contest = await _dbContext.Contests.Include(c => c.Teams).ThenInclude(t => t.PointEntries).AsNoTracking()
+            .FirstOrDefaultAsync(c => c.Id == id);
 
         if (contest == null) return NotFound();
 
+        //TODO: Optimize this
         var response = _mapper.Map<ViewContestResponse>(contest);
+        response.Teams = response.Teams.OrderByDescending(t => t.Points);
 
         return Ok(response);
     }
@@ -204,8 +207,6 @@ public class ContestsController : Controller
 
         if (contest.Teams.All(t => t.Id != user.TeamId))
             return BadRequest(new { Message = "A csapatod nem csatlakozott a versenyhez" });
-
-        var path = Path.Combine("Resources", "Exercises", contest.Exercise.Filename);
 
         return File(System.IO.File.OpenRead(Path.Combine("Resources", "Exercises", contest.Exercise.Filename)),
             contest.Exercise.ContentType,
