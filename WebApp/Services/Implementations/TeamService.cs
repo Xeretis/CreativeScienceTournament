@@ -23,20 +23,20 @@ public class TeamService : ITeamService
 
     private IDataProtector Protector { get; }
 
-    public string CreateInviteToken(int teamId, string userId)
+    public string CreateInviteToken(InviteTokenContent content)
     {
         var ms = new MemoryStream();
         using (var writer = new BinaryWriter(ms, new UTF8Encoding(false, true), true))
         {
-            writer.Write(teamId);
-            writer.Write(userId);
+            writer.Write(content.TeamId);
+            writer.Write(content.UserId);
         }
 
         var protectedBytes = Protector.Protect(ms.ToArray());
         return Convert.ToBase64String(protectedBytes);
     }
 
-    public (int, string)? ReadInviteToken(string token)
+    public InviteTokenContent? ReadInviteToken(string token)
     {
         try
         {
@@ -48,7 +48,7 @@ public class TeamService : ITeamService
                 {
                     var teamId = reader.ReadInt32();
                     var userId = reader.ReadString();
-                    return (teamId, userId);
+                    return new InviteTokenContent { TeamId = teamId, UserId = userId };
                 }
             }
         }
@@ -63,7 +63,7 @@ public class TeamService : ITeamService
 
     public void SendInviteEmail(Team team, ApiUser user, string inviteUrl, string inviterName)
     {
-        var token = CreateInviteToken(team.Id, user.Id);
+        var token = CreateInviteToken(new InviteTokenContent { TeamId = team.Id, UserId = user.Id });
         var completeInviteUrl = $"{inviteUrl}?token={WebUtility.UrlEncode(token)}";
         _backgroundJobClient.Enqueue<SendInviteJob>(j => j.Run(user.Email, completeInviteUrl, team.Name, inviterName));
     }

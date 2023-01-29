@@ -174,11 +174,11 @@ public class TeamsController : Controller
         if (tokenContent == null) return BadRequest(new { Message = "Érvénytelen token" });
 
         var user = await _dbContext.Users.Include(u => u.Team)
-            .FirstOrDefaultAsync(u => u.Id == tokenContent.Value.Item2);
+            .FirstOrDefaultAsync(u => u.Id == tokenContent.UserId);
         if (user == null) return NotFound();
         if (user.Team != null) return BadRequest(new { Message = "Már rendelkezel csapattal" });
 
-        var team = _dbContext.Teams.Include(t => t.Members).FirstOrDefault(t => t.Id == tokenContent.Value.Item1);
+        var team = _dbContext.Teams.Include(t => t.Members).FirstOrDefault(t => t.Id == tokenContent.TeamId);
         if (team == null) return NotFound();
         if (team.Members.Count >= 3) return BadRequest(new { Message = "A csapatban már 3 tag van" });
 
