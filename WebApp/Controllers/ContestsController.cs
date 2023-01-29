@@ -162,4 +162,31 @@ public class ContestsController : Controller
 
         return NoContent();
     }
+
+    [Authorize("FullTeam")]
+    [HttpPost("{id}/Leave")]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    public async Task<ActionResult> LeaveContest([FromRoute] int id)
+    {
+        var contest = await _dbContext.Contests.Include(c => c.Teams).FirstOrDefaultAsync(c => c.Id == id);
+
+        if (contest == null) return NotFound();
+
+        var user = await _dbContext.Users.Include(u => u.Team).FirstOrDefaultAsync(u => u.Id == User.GetId());
+
+        if (user.Team.CreatorId != user.Id)
+            return BadRequest(new { Message = "Csak a csapatod vezetője hagyhatja el a versenyt" });
+
+        if (contest.EndDate < DateTime.Now) return BadRequest(new { Message = "A verseny már véget ért" });
+
+        if (contest.Teams.All(t => t.Id != user.TeamId))
+            return BadRequest(new { Message = "A csapatod nem csatlakozott a versenyhez" });
+
+        contest.Teams.Remove(user.Team);
+        await _dbContext.SaveChangesAsync();
+
+        return NoContent();
+    }
 }
