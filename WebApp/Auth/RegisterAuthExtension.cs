@@ -39,13 +39,6 @@ public static class RegisterAuthExtension
             });
             o.AddPolicy("EmailAny", policy => policy.RequireAuthenticatedUser());
 
-            o.AddPolicy("FullTeam", policy =>
-            {
-                policy.RequireAuthenticatedUser();
-                policy.Requirements.Add(new FullTeamRequirement(true));
-                policy.Requirements.Add(new EmailRequirement(true));
-            });
-
             o.DefaultPolicy = o.GetPolicy("EmailConfirmed")!;
         });
 
@@ -66,7 +59,6 @@ public static class RegisterAuthExtension
             .AddDefaultTokenProviders();
 
         builder.Services.AddScoped<IAuthorizationHandler, EmailRequirementHandler>();
-        builder.Services.AddScoped<IAuthorizationHandler, FullTeamRequirementHandler>();
 
         return services;
     }

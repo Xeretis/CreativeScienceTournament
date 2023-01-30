@@ -5,6 +5,7 @@ using Microsoft.OpenApi.Models;
 using RazorEmails.Services;
 using WebApp.Auth;
 using WebApp.Data;
+using WebApp.Filters;
 using WebApp.Services;
 using WebApp.Support.Auth;
 using WebApp.Support.Hangfire;
@@ -23,6 +24,7 @@ builder.Services.RegisterHangfireSupport(builder.Configuration.GetConnectionStri
 
 builder.Services.RegisterPersistence(builder.Configuration.GetConnectionString("DefaultConnection"));
 builder.Services.RegisterAuth();
+builder.Services.RegisterFilters();
 builder.Services.RegisterWebAppServices();
 builder.Services.RegisterRazorEmailsServices();
 

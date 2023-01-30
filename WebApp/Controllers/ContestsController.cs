@@ -7,6 +7,7 @@ using Sieve.Services;
 using WebApp.Auth;
 using WebApp.Data;
 using WebApp.Data.Entities;
+using WebApp.Filters;
 using WebApp.Models.Requests;
 using WebApp.Models.Responses;
 using WebApp.Services.Interfaces;
@@ -140,7 +141,7 @@ public class ContestsController : Controller
         return NoContent();
     }
 
-    [Authorize("FullTeam")]
+    [ServiceFilter(typeof(RequireFullTeamActionFilter))]
     [HttpPost("{id}/Join")]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -168,7 +169,7 @@ public class ContestsController : Controller
         return NoContent();
     }
 
-    [Authorize("FullTeam")]
+    [ServiceFilter(typeof(RequireFullTeamActionFilter))]
     [HttpPost("{id}/Leave")]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -195,7 +196,7 @@ public class ContestsController : Controller
         return NoContent();
     }
 
-    [Authorize("FullTeam")]
+    [ServiceFilter(typeof(RequireFullTeamActionFilter))]
     [HttpGet("{id}/Exercise")]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
