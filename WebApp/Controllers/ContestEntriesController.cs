@@ -125,6 +125,6 @@ public class ContestEntriesController : Controller
 
         var response = _mapper.Map<ViewContestEntryResponse>(contestEntry);
 
-        return CreatedAtAction(nameof(ViewContestEntry), new { contestId, id = contestEntry.Id }, response);
+        return CreatedAtAction(nameof(ViewOwnContestEntry), new { contestId }, response);
     }
 }
