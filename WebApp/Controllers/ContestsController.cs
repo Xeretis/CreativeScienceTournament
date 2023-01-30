@@ -36,6 +36,7 @@ public class ContestsController : Controller
 
     [AllowAnonymous]
     [HttpGet]
+    [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult<IEnumerable<IndexContestsResponse>>> IndexContests(
         [FromQuery] SieveModel sieveModel)
     {
@@ -50,6 +51,7 @@ public class ContestsController : Controller
     [AllowAnonymous]
     [HttpGet("{id}")]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult<ViewContestResponse>> ViewContest([FromRoute] int id)
     {
         var contest = await _dbContext.Contests.Include(c => c.Teams).ThenInclude(t => t.PointEntries).AsNoTracking()

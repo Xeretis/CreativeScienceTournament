@@ -1,12 +1,13 @@
 using System.Net;
 using System.Security.Claims;
 using AutoMapper;
-using Hangfire;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using WebApp.Data;
 using WebApp.Data.Entities;
 using WebApp.Models.Requests;
 using WebApp.Models.Responses;
@@ -22,19 +23,19 @@ namespace WebApp.Controllers;
 public class AuthController : Controller
 {
     private readonly IAuthService _authService;
-    private readonly IBackgroundJobClient _backgroundJobClient;
+    private readonly ApplicationDbContext _dbContext;
     private readonly IMapper _mapper;
     private readonly SignInManager<ApiUser> _signInManager;
     private readonly UserManager<ApiUser> _userManager;
 
     public AuthController(IAuthService authService, IMapper mapper, SignInManager<ApiUser> signInManager,
-        UserManager<ApiUser> userManager, IBackgroundJobClient backgroundJobClient)
+        UserManager<ApiUser> userManager, ApplicationDbContext dbContext)
     {
         _authService = authService;
         _mapper = mapper;
         _signInManager = signInManager;
         _userManager = userManager;
-        _backgroundJobClient = backgroundJobClient;
+        _dbContext = dbContext;
     }
 
     [HttpPost("Login")]
@@ -120,7 +121,8 @@ public class AuthController : Controller
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult<UserResponse>> GetUser()
     {
-        var user = await _userManager.FindByIdAsync(User.GetId()!);
+        var user = await _dbContext.Users.Include(u => u.Team).ThenInclude(t => t.PointEntries)
+            .FirstOrDefaultAsync(u => u.Id == User.GetId());
 
         var response = _mapper.Map<UserResponse>(user);
         response.Roles = User.FindAll(ClaimTypes.Role).Select(c => c.Value).ToList();

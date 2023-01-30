@@ -9,14 +9,15 @@ public class ApiUserProfile : Profile
 {
     public ApiUserProfile()
     {
-        CreateMap<CreateUserRequest, ApiUser>();
-        CreateMap<UpdateUserRequest, ApiUser>();
-
         CreateMap<ApiUser, LoginResponseUser>();
         CreateMap<ApiUser, UserResponse>();
         CreateMap<ApiUser, ViewTeamResponseUser>();
         CreateMap<ApiUser, IndexTeamResponseUser>();
         CreateMap<ApiUser, IndexUsersResponse>();
         CreateMap<ApiUser, ViewUserResponse>();
+        CreateMap<ApiUser, UserResponseTeamUser>();
+
+        CreateMap<CreateUserRequest, ApiUser>();
+        CreateMap<UpdateUserRequest, ApiUser>();
     }
 }

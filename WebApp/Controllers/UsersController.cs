@@ -36,6 +36,7 @@ public class UsersController : Controller
     }
 
     [HttpGet]
+    [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult<IEnumerable<IndexUsersResponse>>> IndexUsers([FromQuery] SieveModel sieveModel)
     {
         var users = _dbContext.Users.Where(u => u.EmailConfirmed).AsNoTracking();
@@ -48,6 +49,7 @@ public class UsersController : Controller
 
     [HttpGet("{id}")]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult<ViewUserResponse>> ViewUser(string id)
     {
         var user = await _dbContext.Users.Where(u => u.EmailConfirmed).FirstOrDefaultAsync(u => u.Id == id);

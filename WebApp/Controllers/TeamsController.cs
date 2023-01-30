@@ -36,6 +36,7 @@ public class TeamsController : Controller
 
     [AllowAnonymous]
     [HttpGet]
+    [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult<IEnumerable<IndexTeamsResponse>>> IndexTeams([FromQuery] SieveModel sieveModel)
     {
         var teams = _dbContext.Teams.Include(t => t.PointEntries).Include(t => t.Members).AsNoTracking();
@@ -49,6 +50,7 @@ public class TeamsController : Controller
     [AllowAnonymous]
     [HttpGet("{id}")]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult<ViewTeamResponse>> ViewTeam([FromRoute] int id)
     {
         var team = await _dbContext.Teams.Include(t => t.Members).Include(t => t.PointEntries).AsNoTracking()

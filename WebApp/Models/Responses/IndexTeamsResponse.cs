@@ -5,7 +5,7 @@ public class IndexTeamsResponse
     public int Id { get; set; }
     public string Name { get; set; }
     public int Points { get; set; }
-    public string OwnerId { get; set; }
+    public string CreatorId { get; set; }
 
     public IEnumerable<IndexTeamResponseUser> Members { get; set; }
 }
