@@ -232,4 +232,5 @@ _Pvt_Extensions
 .fake/
 
 Resources/Images/*
+Resources/Solutions/*
 Resources/Exercises/*

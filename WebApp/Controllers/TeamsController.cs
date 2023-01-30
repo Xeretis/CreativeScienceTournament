@@ -66,7 +66,7 @@ public class TeamsController : Controller
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<ActionResult> CreateTeam(CreateTeamRequest request)
+    public async Task<ActionResult<ViewTeamResponse>> CreateTeam(CreateTeamRequest request)
     {
         var user = await _dbContext.Users.Include(u => u.Team).FirstOrDefaultAsync(u => u.Id == User.GetId());
 

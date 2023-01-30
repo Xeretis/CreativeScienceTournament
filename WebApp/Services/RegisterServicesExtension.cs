@@ -11,6 +11,7 @@ public static class RegisterServicesExtension
         services.AddSingleton<IMailService, MailService>();
         services.AddScoped<ITeamService, TeamService>();
         services.AddScoped<IContestService, ContestService>();
+        services.AddScoped<IContestEntryService, ContestEntryService>();
         return services;
     }
 }

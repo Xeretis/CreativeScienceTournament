@@ -30,5 +30,7 @@ public class RequireFullTeamActionFilter : IAsyncActionFilter
 
         if (user.Team.Members.Count != 3)
             context.Result = new BadRequestObjectResult(new { Message = "A csapatodban nincs 3 fő" });
+
+        await next();
     }
 }

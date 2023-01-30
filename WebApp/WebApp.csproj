@@ -1372,6 +1372,7 @@
         <Folder Include="Migrations" />
         <Folder Include="Resources\Exercises" />
         <Folder Include="Resources\Images" />
+        <Folder Include="Resources\Solutions" />
     </ItemGroup>
 
     <ItemGroup>

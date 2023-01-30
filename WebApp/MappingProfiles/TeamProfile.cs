@@ -17,6 +17,8 @@ public class TeamProfile : Profile
             .ForMember(r => r.Points, o => o.MapFrom(t => t.PointEntries.Sum(e => e.Amount)));
         CreateMap<Team, UserResponseTeam>()
             .ForMember(r => r.Points, o => o.MapFrom(t => t.PointEntries.Sum(e => e.Amount)));
+        CreateMap<Team, IndexContestEntriesResponseTeam>();
+        CreateMap<Team, ViewContestEntryResponseTeam>();
 
         CreateMap<CreateTeamRequest, Team>();
         CreateMap<UpdateTeamRequest, Team>();

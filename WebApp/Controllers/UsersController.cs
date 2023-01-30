@@ -64,7 +64,8 @@ public class UsersController : Controller
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<ActionResult> CreateUser([FromQuery] string confirmUrl, CreateUserRequest request)
+    public async Task<ActionResult<ViewUserResponse>> CreateUser([FromQuery] string confirmUrl,
+        CreateUserRequest request)
     {
         var user = _mapper.Map<ApiUser>(request);
 

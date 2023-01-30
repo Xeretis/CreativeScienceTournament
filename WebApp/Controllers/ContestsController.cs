@@ -71,7 +71,7 @@ public class ContestsController : Controller
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<ActionResult> CreateContest([FromForm] CreateContestRequest request)
+    public async Task<ActionResult<ViewContestResponse>> CreateContest([FromForm] CreateContestRequest request)
     {
         var contest = _mapper.Map<Contest>(request);
 
@@ -176,7 +176,8 @@ public class ContestsController : Controller
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     public async Task<ActionResult> LeaveContest([FromRoute] int id)
     {
-        var contest = await _dbContext.Contests.Include(c => c.Teams).FirstOrDefaultAsync(c => c.Id == id);
+        var contest = await _dbContext.Contests.Include(c => c.Teams).Include(c => c.ContestEntries)
+            .FirstOrDefaultAsync(c => c.Id == id);
 
         if (contest == null) return NotFound();
 
@@ -191,6 +192,7 @@ public class ContestsController : Controller
             return BadRequest(new { Message = "A csapatod nem csatlakozott a versenyhez" });
 
         contest.Teams.Remove(user.Team);
+        contest.ContestEntries.RemoveAll(e => e.TeamId == user.Team.Id);
         await _dbContext.SaveChangesAsync();
 
         return NoContent();
@@ -200,6 +202,7 @@ public class ContestsController : Controller
     [HttpGet("{id}/Exercise")]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult> DownloadExercise([FromRoute] int id)
     {
         var contest = await _dbContext.Contests.Include(c => c.Teams).FirstOrDefaultAsync(c => c.Id == id);
@@ -214,6 +217,5 @@ public class ContestsController : Controller
         return File(System.IO.File.OpenRead(Path.Combine("Resources", "Exercises", contest.Exercise.Filename)),
             contest.Exercise.ContentType,
             contest.Exercise.OriginalFilename);
-        ;
     }
 }
