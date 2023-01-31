@@ -127,4 +127,40 @@ public class ContestEntriesController : Controller
 
         return CreatedAtAction(nameof(ViewOwnContestEntry), new { contestId }, response);
     }
+
+    [Authorize(Roles = $"{AuthConstants.AdminRole}")]
+    [HttpDelete("{id}")]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    public async Task<ActionResult> DeleteContestEntry([FromRoute] int id)
+    {
+        var contestEntry = await _dbContext.ContestEntries.FindAsync(id);
+
+        if (contestEntry == null) return NotFound();
+
+        _dbContext.ContestEntries.Remove(contestEntry);
+        await _dbContext.SaveChangesAsync();
+
+        return NoContent();
+    }
+
+    [ServiceFilter(typeof(RequireFullTeamActionFilter))]
+    [HttpDelete("{contestId}/Own")]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    public async Task<ActionResult> DeleteOwnContestEntry([FromRoute] int contestId)
+    {
+        var user = await _dbContext.Users.FindAsync(User.GetId());
+
+        var contestEntry =
+            await _dbContext.ContestEntries.FirstOrDefaultAsync(
+                c => c.ContestId == contestId && c.TeamId == user.TeamId);
+
+        if (contestEntry == null) return NotFound();
+
+        _dbContext.ContestEntries.Remove(contestEntry);
+        await _dbContext.SaveChangesAsync();
+
+        return NoContent();
+    }
 }
