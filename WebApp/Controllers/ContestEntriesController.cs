@@ -72,6 +72,21 @@ public class ContestEntriesController : Controller
         return Ok(response);
     }
 
+    [Authorize(Roles = $"{AuthConstants.AdminRole}")]
+    [HttpGet("{id}/Solution")]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    public async Task<ActionResult> DownloadSolution([FromRoute] int id)
+    {
+        var contestEntry = await _dbContext.ContestEntries.FindAsync(id);
+
+        if (contestEntry == null) return NotFound();
+
+        return File(System.IO.File.OpenRead(Path.Combine("Resources", "Solutions", contestEntry.Solution.Filename)),
+            contestEntry.Solution.ContentType,
+            contestEntry.Solution.OriginalFilename);
+    }
+
     [ServiceFilter(typeof(RequireFullTeamActionFilter))]
     [HttpGet("{contestId}/Own")]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
