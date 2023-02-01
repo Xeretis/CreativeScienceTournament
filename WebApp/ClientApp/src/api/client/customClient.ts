@@ -1,3 +1,4 @@
+import { handleApiErrors } from "./../../utils/api";
 import { useApiStore } from "../../stores/apiStore";
 
 type CustomClient<T> = (data: {
@@ -12,10 +13,11 @@ type CustomClient<T> = (data: {
 export const useCustomClient = <T>(): CustomClient<T> => {
     return async ({ url, method, params, data }) => {
         try {
-            const response = await fetch(url + new URLSearchParams(params), {
+            const response = await fetch(url + "?" + new URLSearchParams(params), {
                 method,
                 headers: { ...data?.headers, "Content-Type": "application/json", Accept: "application/json" },
                 ...(data ? { body: JSON.stringify(data) } : {}),
+
             });
 
             if (!response.ok) {
@@ -32,6 +34,7 @@ export const useCustomClient = <T>(): CustomClient<T> => {
             if (error.status === 401) {
                 useApiStore.setState({ isAuthenticated: false });
             }
+            handleApiErrors(error);
             throw error;
         }
     };

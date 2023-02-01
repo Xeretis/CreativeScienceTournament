@@ -8,6 +8,7 @@ import { RequireNoAuth } from "./helpers/requireNoAuth";
 export const AppRouter = () => {
     const IndexPage = lazy(() => import("../pages/indexPage"));
     const LoginPage = lazy(() => import("../pages/auth/loginPage"));
+    const ConfirmEmailPage = lazy(() => import("../pages/auth/confirmEmail"));
     const RegisterPage = lazy(() => import("../pages/auth/registerPage"));
     const HomePage = lazy(() => import("../pages/protected/homePage"));
 
@@ -22,6 +23,7 @@ export const AppRouter = () => {
                 <Route element={<RequireAuth />}>
                     <Route path="/home" element={<HomePage />} />
                 </Route>
+                <Route path="/auth/confirmEmail" element={<ConfirmEmailPage />} />
             </Routes>
         </Suspense>
     );

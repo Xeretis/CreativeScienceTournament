@@ -47,7 +47,7 @@ public class AuthController : Controller
 
         if (user == null)
         {
-            ModelState.AddModelError(nameof(LoginRequest.Email), "Email or password is invalid");
+            ModelState.AddModelError(nameof(LoginRequest.Email), "Hibás e-mail vagy jelszó");
             return ValidationProblem();
         }
 
@@ -56,7 +56,7 @@ public class AuthController : Controller
 
         if (result == SignInResult.Failed)
         {
-            ModelState.AddModelError(nameof(LoginRequest.Email), "Email or password is invalid");
+            ModelState.AddModelError(nameof(LoginRequest.Email), "Hibás e-mail vagy jelszó");
             return ValidationProblem();
         }
 
