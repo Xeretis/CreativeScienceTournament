@@ -43,14 +43,14 @@ const ConfirmEmailPage = (): JSX.Element => {
 
 
     if (!params.get("token") || !params.get("userId")) {
-        return (<Center className={classes.container}>
+        return (<Center className={classes.container} p="xl">
             <Title color="red" align="center">Hibás megerősítési URL</Title>
             <Text color="red" align="center">Kérlek ellenőrizd az oldal URL címét, hogy biztos jó-e!</Text>
         </Center>);
     }
 
     return (
-        <Center className={classes.container}>
+        <Center className={classes.container} p="xl">
             <Title align="center">E-mail megerősítése</Title>
             <Text align="center" color="dimmed">Kérlek kattints az alábbi gombra az e-mail címed megerősítéséhez!</Text>
             <Button variant="outline" mt="lg" onClick={confirm}>E-mail cím megerősítése</Button>
