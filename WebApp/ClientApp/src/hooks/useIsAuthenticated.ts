@@ -1,4 +1,4 @@
-import { useApiStore } from "./../stores/apiStore";
+import { useApiStore } from "../stores/apiStore";
 
 export const useIsAuthenticated = () => {
     const isAuthenticated = useApiStore((state) => state.isAuthenticated);

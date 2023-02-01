@@ -6,6 +6,6 @@ const HomePage = (): JSX.Element => {
     const { classes } = useStyles();
 
     return <Box />;
-}
+};
 
 export default HomePage;

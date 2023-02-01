@@ -1,4 +1,4 @@
-import { Box, Button, Center, PasswordInput, TextInput, Title, createStyles } from "@mantine/core";
+import { Button, Center, PasswordInput, TextInput, Title, createStyles } from "@mantine/core";
 
 import { ValidationError } from "../../utils/api";
 import { camelize } from "../../utils/string";
@@ -49,7 +49,7 @@ const LoginPage = (): JSX.Element => {
 
     const submit = form.onSubmit(async () => {
         try {
-            const response = await login.mutateAsync({ data: form.values });
+            await login.mutateAsync({ data: form.values });
             setIsAuthenticated(true);
         } catch (error) {
             if (error instanceof ValidationError) {
@@ -75,12 +75,12 @@ const LoginPage = (): JSX.Element => {
                 <Title order={1} size="h2" align="center" mb="sm">
                     Belépés
                 </Title>
-                <TextInput label="E-mail" required type="email" {...form.getInputProps("email")} mb="sm" />
-                <PasswordInput label="Jelszó" required {...form.getInputProps("password")} mb="md" />
+                <TextInput label="E-mail" required={true} type="email" {...form.getInputProps("email")} mb="sm" />
+                <PasswordInput label="Jelszó" required={true} {...form.getInputProps("password")} mb="md" />
                 <Button type="submit">Belépés</Button>
             </form>
         </Center>
     );
-}
+};
 
 export default LoginPage;

@@ -1,13 +1,11 @@
 import { PersistOptions, persist } from "zustand/middleware";
+import { StateCreator, create } from "zustand";
 
-import { StateCreator } from "zustand";
-import { UserResponse } from "../api/client/model";
-import { create } from "zustand";
 import { mountStoreDevtool } from "simple-zustand-devtools";
 
 export interface ApiState {
     isAuthenticated?: boolean;
-    setIsAuthenticated: (isAuthenticated: boolean) => void;
+    setIsAuthenticated(isAuthenticated: boolean): void;
 }
 
 type ApiStorePersist = (config: StateCreator<ApiState>, options: PersistOptions<ApiState>) => StateCreator<ApiState>;

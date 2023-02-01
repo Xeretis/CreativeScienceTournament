@@ -1,4 +1,4 @@
-import { Box, Button, Center, PasswordInput, TextInput, Title, createStyles } from "@mantine/core";
+import { Button, Center, PasswordInput, TextInput, Title, createStyles } from "@mantine/core";
 import { useForm, zodResolver } from "@mantine/form";
 
 import { ValidationError } from "../../utils/api";
@@ -6,7 +6,7 @@ import { camelize } from "../../utils/string";
 import { useApiStore } from "../../stores/apiStore";
 import { usePostApiAuthLogin } from "../../api/client/auth/auth";
 import { usePostApiUsers } from "../../api/client/users/users";
-import { z } from 'zod';
+import { z } from "zod";
 
 const useStyles = createStyles((theme) => ({
     container: {
@@ -58,8 +58,9 @@ const RegisterPage = (): JSX.Element => {
 
     const submit = form.onSubmit(async (values) => {
         try {
-            await register.mutateAsync({ data: values, params: { confirmUrl: document.location.origin + "/auth/confirmEmail" } });
-            const res = await login.mutateAsync({ data: { email: values.email, password: values.password } });
+            await register.mutateAsync({ data: values, params: { confirmUrl: `${document.location.origin}/auth/confirmEmail` } });
+            await login.mutateAsync({ data: { email: values.email, password: values.password } });
+
             setIsAuthenticated(true);
         } catch (error) {
             if (error instanceof ValidationError) {
@@ -85,14 +86,14 @@ const RegisterPage = (): JSX.Element => {
                 <Title order={1} size="h2" align="center" mb="sm">
                     Regisztrálás
                 </Title>
-                <TextInput label="E-mail" required type="email" {...form.getInputProps("email")} mb="sm" />
-                <TextInput label="Felhasználónév" required {...form.getInputProps("userName")} mb="sm" />
-                <PasswordInput label="Jelszó" required {...form.getInputProps("password")} mb="sm" />
-                <PasswordInput label="Jelszó megerősítése" required {...form.getInputProps("confirmPassword")} mb="md" />
+                <TextInput label="E-mail" required={true} type="email" {...form.getInputProps("email")} mb="sm" />
+                <TextInput label="Felhasználónév" required={true} {...form.getInputProps("userName")} mb="sm" />
+                <PasswordInput label="Jelszó" required={true} {...form.getInputProps("password")} mb="sm" />
+                <PasswordInput label="Jelszó megerősítése" required={true} {...form.getInputProps("confirmPassword")} mb="md" />
                 <Button type="submit">Regisztrálás</Button>
             </form>
         </Center>
     );
-}
+};
 
 export default RegisterPage;

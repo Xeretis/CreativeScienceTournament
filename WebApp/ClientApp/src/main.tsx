@@ -44,8 +44,8 @@ const App = () => {
     );
 };
 
-ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
-  <BrowserRouter>
-    <App />
-  </BrowserRouter>,
-)
+ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
+    <BrowserRouter>
+        <App />
+    </BrowserRouter>,
+);

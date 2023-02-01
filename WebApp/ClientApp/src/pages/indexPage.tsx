@@ -1,8 +1,8 @@
-import { Box, Button, Center, createStyles } from "@mantine/core";
+import { Button, Center, createStyles } from "@mantine/core";
 
 import { Link } from "react-router-dom";
 
-const useStyles = createStyles((theme) => ({
+const useStyles = createStyles(() => ({
     container: {
         height: "100vh",
     }
