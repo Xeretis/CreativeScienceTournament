@@ -18,6 +18,10 @@ public class Contest : BaseEntity
     [Required]
     public string Description { get; set; }
 
+    [Sieve(CanFilter = true, CanSort = true)]
+    [Required]
+    public bool Concluded { get; set; }
+
     [Required] public Exercise Exercise { get; set; }
 
     [Required] public int MaxPoints { get; set; }

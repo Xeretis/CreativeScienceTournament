@@ -1,3 +1,4 @@
+export * from './correctContestEntryRequest';
 export * from './createTeamRequest';
 export * from './createUserRequest';
 export * from './getApiContestEntriesContestIdParams';
@@ -23,6 +24,7 @@ export * from './postApiTeamsInviteUserIdParams';
 export * from './postApiTeamsJoinParams';
 export * from './postApiUsersParams';
 export * from './problemDetails';
+export * from './updateContestEntryCorrectionRequest';
 export * from './updateTeamRequest';
 export * from './updateUserRequest';
 export * from './userResponse';

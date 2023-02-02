@@ -1390,10 +1390,10 @@
     </Target>
 
 
-    <!--    <Target Name="OpenAPI" AfterTargets="Build" Condition="$(Configuration)=='Debug'">-->
-    <!--        <Exec Command="dotnet swagger tofile &#45;&#45;output $(SpaRoot)src/api/schema/v1/schema.yaml &#45;&#45;yaml $(OutputPath)$(AssemblyName).dll v1" WorkingDirectory="$(ProjectDir)"/>-->
-    <!--        <Exec Command="dotnet swagger tofile &#45;&#45;output $(SpaRoot)src/api/schema/v1/schema.json $(OutputPath)$(AssemblyName).dll v1" WorkingDirectory="$(ProjectDir)"/>-->
-    <!--    </Target>-->
+    <Target Name="OpenAPI" AfterTargets="Build" Condition="$(Configuration)=='Debug'">
+        <Exec Command="dotnet tool restore" WorkingDirectory="$(ProjectDir)" />
+        <Exec Command="dotnet swagger tofile --output $(SpaRoot)src/api/schema/v1/schema.json $(OutputPath)$(AssemblyName).dll v1" WorkingDirectory="$(ProjectDir)" />
+    </Target>
 
     <Target Name="PublishRunWebpack" AfterTargets="ComputeFilesToPublish">
         <!-- As part of publishing, ensure the JS resources are freshly built in production mode -->

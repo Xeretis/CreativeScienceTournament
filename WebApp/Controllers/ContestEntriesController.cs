@@ -7,6 +7,7 @@ using Sieve.Services;
 using WebApp.Auth;
 using WebApp.Data;
 using WebApp.Data.Entities;
+using WebApp.Data.Entities.Owned;
 using WebApp.Filters;
 using WebApp.Models.Requests;
 using WebApp.Models.Responses;
@@ -120,8 +121,10 @@ public class ContestEntriesController : Controller
         if (contest.StartDate > DateTime.Now) return BadRequest(new { Message = "A verseny még nem kezdődött el" });
         if (contest.EndDate < DateTime.Now) return BadRequest(new { Message = "A verseny már véget ért" });
 
-        var user = await _dbContext.Users.FindAsync(User.GetId());
+        var user = await _dbContext.Users.Include(u => u.Team).FirstOrDefaultAsync(u => u.Id == User.GetId());
 
+        if (user.Team.CreatorId != user.Id)
+            return BadRequest(new { Message = "Csak a csapat létrehozója küldhet be megoldást" });
         if (contest.Teams.All(t => t.Id != user.TeamId))
             return BadRequest(new { Message = "A csapatod nem csatlakozott a versenyhez" });
         if (contest.ContestEntries.Any(e => e.TeamId == user.TeamId))
@@ -174,6 +177,50 @@ public class ContestEntriesController : Controller
         if (contestEntry == null) return NotFound();
 
         _dbContext.ContestEntries.Remove(contestEntry);
+        await _dbContext.SaveChangesAsync();
+
+        return NoContent();
+    }
+
+    [Authorize(Roles = $"{AuthConstants.AdminRole}")]
+    [HttpPost("{id}/Correct")]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    public async Task<ActionResult> CorrectContestEntry([FromRoute] int id,
+        [FromBody] CorrectContestEntryRequest request)
+    {
+        var contestEntry = await _dbContext.ContestEntries.Include(e => e.Contest).FirstOrDefaultAsync(e => e.Id == id);
+
+        if (contestEntry == null) return NotFound();
+
+        if (contestEntry.Contest.Concluded) return BadRequest(new { Message = "A verseny már véget ért" });
+
+        if (contestEntry.Correction != null) return BadRequest(new { Message = "Ez a megoldás már ki lett javítva" });
+
+        contestEntry.Correction = _mapper.Map<Correction>(request);
+
+        await _dbContext.SaveChangesAsync();
+
+        return NoContent();
+    }
+
+    [Authorize(Roles = $"{AuthConstants.AdminRole}")]
+    [HttpPut("{id}/Correct")]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    public async Task<ActionResult> UpdateContestEntryCorrection([FromRoute] int id,
+        [FromBody] UpdateContestEntryCorrectionRequest request)
+    {
+        var contestEntry = await _dbContext.ContestEntries.Include(e => e.Contest).FirstOrDefaultAsync(e => e.Id == id);
+
+        if (contestEntry == null) return NotFound();
+
+        if (contestEntry.Contest.Concluded) return BadRequest(new { Message = "A verseny már véget ért" });
+
+        contestEntry.Correction = _mapper.Map<Correction>(request);
+
         await _dbContext.SaveChangesAsync();
 
         return NoContent();

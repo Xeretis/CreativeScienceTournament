@@ -75,7 +75,15 @@ app.MapControllerRoute(
 
 app.MapFallbackToFile("index.html");
 
-await AuthSeeder.SeedRoles(app.Services);
-await AuthSeeder.SeedAdmin(app.Services, builder.Configuration);
+try
+{
+    await AuthSeeder.SeedRoles(app.Services);
+    await AuthSeeder.SeedAdmin(app.Services, builder.Configuration);
+}
+catch
+{
+    var logger = app.Services.GetRequiredService<ILogger<Program>>();
+    logger.LogError("An error occurred while seeding the database");
+}
 
 app.Run();

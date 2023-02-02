@@ -34,6 +34,7 @@ namespace WebApp.Migrations
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Topic = table.Column<string>(type: "text", nullable: false),
                     Description = table.Column<string>(type: "text", nullable: false),
+                    Concluded = table.Column<bool>(type: "boolean", nullable: false, defaultValue: false),
                     ExerciseFilename = table.Column<string>(name: "Exercise_Filename", type: "text", nullable: false),
                     ExerciseOriginalFilename = table.Column<string>(name: "Exercise_OriginalFilename", type: "text", nullable: false),
                     ExerciseContentType = table.Column<string>(name: "Exercise_ContentType", type: "text", nullable: false),

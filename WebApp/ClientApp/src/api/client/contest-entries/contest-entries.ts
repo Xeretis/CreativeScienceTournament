@@ -21,7 +21,9 @@ import type {
   ProblemDetails,
   GetApiContestEntriesContestIdParams,
   ViewContestEntryResponse,
-  PostApiContestEntriesContestIdBody
+  PostApiContestEntriesContestIdBody,
+  CorrectContestEntryRequest,
+  UpdateContestEntryCorrectionRequest
 } from '.././model'
 import { useCustomClient } from '.././customClient';
 import type { ErrorType, BodyType } from '.././customClient';
@@ -332,5 +334,87 @@ export const useDeleteApiContestEntriesContestIdOwnHook = () => {
         
 
       return useMutation<Awaited<ReturnType<typeof deleteApiContestEntriesId>>, TError, {id: number}, TContext>(mutationFn, mutationOptions);
+    }
+    export const usePostApiContestEntriesIdCorrectHook = () => {
+        const postApiContestEntriesIdCorrect = useCustomClient<void>();
+
+        return (
+    id: number,
+    correctContestEntryRequest: BodyType<CorrectContestEntryRequest>,
+ ) => {
+        return postApiContestEntriesIdCorrect(
+          {url: `/Api/ContestEntries/${id}/Correct`, method: 'post',
+      headers: {'Content-Type': 'application/json', },
+      data: correctContestEntryRequest
+    },
+          );
+        }
+      }
+    
+
+
+    export type PostApiContestEntriesIdCorrectMutationResult = NonNullable<Awaited<ReturnType<ReturnType<typeof usePostApiContestEntriesIdCorrectHook>>>>
+    export type PostApiContestEntriesIdCorrectMutationBody = BodyType<CorrectContestEntryRequest>
+    export type PostApiContestEntriesIdCorrectMutationError = ErrorType<ProblemDetails>
+
+    export const usePostApiContestEntriesIdCorrect = <TError = ErrorType<ProblemDetails>,
+    
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<ReturnType<typeof usePostApiContestEntriesIdCorrectHook>>>, TError,{id: number;data: BodyType<CorrectContestEntryRequest>}, TContext>, }
+) => {
+      const {mutation: mutationOptions} = options ?? {};
+
+      const postApiContestEntriesIdCorrect =  usePostApiContestEntriesIdCorrectHook()
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<ReturnType<typeof usePostApiContestEntriesIdCorrectHook>>>, {id: number;data: BodyType<CorrectContestEntryRequest>}> = (props) => {
+          const {id,data} = props ?? {};
+
+          return  postApiContestEntriesIdCorrect(id,data,)
+        }
+
+        
+
+      return useMutation<Awaited<ReturnType<typeof postApiContestEntriesIdCorrect>>, TError, {id: number;data: BodyType<CorrectContestEntryRequest>}, TContext>(mutationFn, mutationOptions);
+    }
+    export const usePutApiContestEntriesIdCorrectHook = () => {
+        const putApiContestEntriesIdCorrect = useCustomClient<void>();
+
+        return (
+    id: number,
+    updateContestEntryCorrectionRequest: BodyType<UpdateContestEntryCorrectionRequest>,
+ ) => {
+        return putApiContestEntriesIdCorrect(
+          {url: `/Api/ContestEntries/${id}/Correct`, method: 'put',
+      headers: {'Content-Type': 'application/json', },
+      data: updateContestEntryCorrectionRequest
+    },
+          );
+        }
+      }
+    
+
+
+    export type PutApiContestEntriesIdCorrectMutationResult = NonNullable<Awaited<ReturnType<ReturnType<typeof usePutApiContestEntriesIdCorrectHook>>>>
+    export type PutApiContestEntriesIdCorrectMutationBody = BodyType<UpdateContestEntryCorrectionRequest>
+    export type PutApiContestEntriesIdCorrectMutationError = ErrorType<ProblemDetails>
+
+    export const usePutApiContestEntriesIdCorrect = <TError = ErrorType<ProblemDetails>,
+    
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<ReturnType<typeof usePutApiContestEntriesIdCorrectHook>>>, TError,{id: number;data: BodyType<UpdateContestEntryCorrectionRequest>}, TContext>, }
+) => {
+      const {mutation: mutationOptions} = options ?? {};
+
+      const putApiContestEntriesIdCorrect =  usePutApiContestEntriesIdCorrectHook()
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<ReturnType<typeof usePutApiContestEntriesIdCorrectHook>>>, {id: number;data: BodyType<UpdateContestEntryCorrectionRequest>}> = (props) => {
+          const {id,data} = props ?? {};
+
+          return  putApiContestEntriesIdCorrect(id,data,)
+        }
+
+        
+
+      return useMutation<Awaited<ReturnType<typeof putApiContestEntriesIdCorrect>>, TError, {id: number;data: BodyType<UpdateContestEntryCorrectionRequest>}, TContext>(mutationFn, mutationOptions);
     }
     

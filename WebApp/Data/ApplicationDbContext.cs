@@ -22,6 +22,8 @@ public class ApplicationDbContext : IdentityDbContext<ApiUser>
         builder.Entity<ContestEntry>().OwnsOne<Solution>(e => e.Solution);
         builder.Entity<ContestEntry>().OwnsOne<Correction>(e => e.Correction);
 
+        builder.Entity<Contest>().Property(c => c.Concluded).HasDefaultValue(false);
+
         builder.Entity<Team>().HasMany<ApiUser>(t => t.Members).WithOne(u => u.Team).OnDelete(DeleteBehavior.SetNull);
         base.OnModelCreating(builder);
     }
