@@ -13,8 +13,8 @@ type CustomClient<T> = (data: {
 export const useCustomClient = <T>(): CustomClient<T> => {
     return async ({ url, method, params, data }) => {
         try {
-            const response = await fetch(url + "?" + new URLSearchParams(params), {
-                method,
+            const response = await fetch(`${url}?${new URLSearchParams(params)}`, {
+                method: method.toUpperCase(),
                 headers: { ...data?.headers, "Content-Type": "application/json", Accept: "application/json" },
                 ...(data ? { body: JSON.stringify(data) } : {}),
 

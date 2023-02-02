@@ -47,9 +47,9 @@ const LoginPage = (): JSX.Element => {
         },
     });
 
-    const submit = form.onSubmit(async () => {
+    const submit = form.onSubmit(async (values) => {
         try {
-            await login.mutateAsync({ data: form.values });
+            await login.mutateAsync({ data: values });
             setIsAuthenticated(true);
         } catch (error) {
             if (error instanceof ValidationError) {
@@ -77,7 +77,7 @@ const LoginPage = (): JSX.Element => {
                 </Title>
                 <TextInput label="E-mail" required={true} type="email" {...form.getInputProps("email")} mb="sm" />
                 <PasswordInput label="Jelszó" required={true} {...form.getInputProps("password")} mb="md" />
-                <Button type="submit">Belépés</Button>
+                <Button type="submit" loading={login.isLoading}>Belépés</Button>
             </form>
         </Center>
     );

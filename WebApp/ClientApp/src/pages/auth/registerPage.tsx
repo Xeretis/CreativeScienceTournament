@@ -90,7 +90,7 @@ const RegisterPage = (): JSX.Element => {
                 <TextInput label="Felhasználónév" required={true} {...form.getInputProps("userName")} mb="sm" />
                 <PasswordInput label="Jelszó" required={true} {...form.getInputProps("password")} mb="sm" />
                 <PasswordInput label="Jelszó megerősítése" required={true} {...form.getInputProps("confirmPassword")} mb="md" />
-                <Button type="submit">Regisztrálás</Button>
+                <Button type="submit" loading={register.isLoading}>Regisztrálás</Button>
             </form>
         </Center>
     );

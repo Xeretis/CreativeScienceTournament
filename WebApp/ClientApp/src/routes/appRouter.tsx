@@ -8,6 +8,8 @@ import { RequireNoAuth } from "./helpers/requireNoAuth";
 import { RequireUnconfirmedEmail } from "./helpers/requireUnconfirmedEmail";
 
 export const AppRouter = () => {
+    const ProtectedLayout = lazy(() => import("./layouts/protectedLayout"));
+
     const IndexPage = lazy(() => import("../pages/indexPage"));
     const LoginPage = lazy(() => import("../pages/auth/loginPage"));
     const ConfirmEmailPage = lazy(() => import("../pages/auth/confirmEmailPage"));
@@ -25,7 +27,9 @@ export const AppRouter = () => {
                 </Route>
                 <Route element={<RequireAuth />}>
                     <Route element={<RequireConfirmedEmail />}>
-                        <Route path="/home" element={<HomePage />} />
+                        <Route element={<ProtectedLayout />}>
+                            <Route path="/home" element={<HomePage />} />
+                        </Route>
                     </Route>
                     <Route element={<RequireUnconfirmedEmail />}>
                         <Route path="/auth/unconfirmedEmail" element={<UnconfirmedEmailPage />} />

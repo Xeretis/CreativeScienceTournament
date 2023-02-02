@@ -43,11 +43,11 @@ export const useGetApiUsersHook = () => {
           );
         }
       }
-    
+
 
 export const getGetApiUsersQueryKey = (params?: GetApiUsersParams,) => [`/Api/Users`, ...(params ? [params]: [])];
 
-    
+
 export type GetApiUsersQueryResult = NonNullable<Awaited<ReturnType<ReturnType<typeof useGetApiUsersHook>>>>
 export type GetApiUsersQueryError = ErrorType<unknown>
 
@@ -66,7 +66,7 @@ export const useGetApiUsers = <TData = Awaited<ReturnType<ReturnType<typeof useG
   const queryFn: QueryFunction<Awaited<ReturnType<ReturnType<typeof useGetApiUsersHook>>>> = ({ signal }) => getApiUsers(params, signal);
 
 
-  
+
 
   const query = useQuery<Awaited<ReturnType<ReturnType<typeof useGetApiUsersHook>>>, TError, TData>(queryKey, queryFn, queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
 
@@ -91,7 +91,7 @@ export const usePostApiUsersHook = () => {
           );
         }
       }
-    
+
 
 
     export type PostApiUsersMutationResult = NonNullable<Awaited<ReturnType<ReturnType<typeof usePostApiUsersHook>>>>
@@ -99,7 +99,7 @@ export const usePostApiUsersHook = () => {
     export type PostApiUsersMutationError = ErrorType<ProblemDetails>
 
     export const usePostApiUsers = <TError = ErrorType<ProblemDetails>,
-    
+
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<ReturnType<typeof usePostApiUsersHook>>>, TError,{data: BodyType<CreateUserRequest>;params?: PostApiUsersParams}, TContext>, }
 ) => {
       const {mutation: mutationOptions} = options ?? {};
@@ -113,7 +113,7 @@ export const usePostApiUsersHook = () => {
           return  postApiUsers(data,params,)
         }
 
-        
+
 
       return useMutation<Awaited<ReturnType<typeof postApiUsers>>, TError, {data: BodyType<CreateUserRequest>;params?: PostApiUsersParams}, TContext>(mutationFn, mutationOptions);
     }
@@ -130,11 +130,11 @@ export const usePostApiUsersHook = () => {
           );
         }
       }
-    
+
 
 export const getGetApiUsersIdQueryKey = (id: string,) => [`/Api/Users/${id}`];
 
-    
+
 export type GetApiUsersIdQueryResult = NonNullable<Awaited<ReturnType<ReturnType<typeof useGetApiUsersIdHook>>>>
 export type GetApiUsersIdQueryError = ErrorType<ProblemDetails>
 
@@ -153,7 +153,7 @@ export const useGetApiUsersId = <TData = Awaited<ReturnType<ReturnType<typeof us
   const queryFn: QueryFunction<Awaited<ReturnType<ReturnType<typeof useGetApiUsersIdHook>>>> = ({ signal }) => getApiUsersId(id, signal);
 
 
-  
+
 
   const query = useQuery<Awaited<ReturnType<ReturnType<typeof useGetApiUsersIdHook>>>, TError, TData>(queryKey, queryFn, {enabled: !!(id), ...queryOptions}) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
 
@@ -177,7 +177,7 @@ export const usePatchApiUsersIdHook = () => {
           );
         }
       }
-    
+
 
 
     export type PatchApiUsersIdMutationResult = NonNullable<Awaited<ReturnType<ReturnType<typeof usePatchApiUsersIdHook>>>>
@@ -185,7 +185,7 @@ export const usePatchApiUsersIdHook = () => {
     export type PatchApiUsersIdMutationError = ErrorType<ProblemDetails>
 
     export const usePatchApiUsersId = <TError = ErrorType<ProblemDetails>,
-    
+
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<ReturnType<typeof usePatchApiUsersIdHook>>>, TError,{id: string;data: BodyType<UpdateUserRequest>}, TContext>, }
 ) => {
       const {mutation: mutationOptions} = options ?? {};
@@ -199,8 +199,7 @@ export const usePatchApiUsersIdHook = () => {
           return  patchApiUsersId(id,data,)
         }
 
-        
+
 
       return useMutation<Awaited<ReturnType<typeof patchApiUsersId>>, TError, {id: string;data: BodyType<UpdateUserRequest>}, TContext>(mutationFn, mutationOptions);
     }
-    
