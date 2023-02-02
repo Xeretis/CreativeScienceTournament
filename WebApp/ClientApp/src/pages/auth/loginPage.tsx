@@ -1,5 +1,6 @@
-import { Button, Center, PasswordInput, TextInput, Title, createStyles } from "@mantine/core";
+import { Anchor, Button, Center, PasswordInput, Text, TextInput, Title, createStyles } from "@mantine/core";
 
+import { Link } from "react-router-dom";
 import { ValidationError } from "../../utils/api";
 import { camelize } from "../../utils/string";
 import { useApiStore } from "../../stores/apiStore";
@@ -77,7 +78,9 @@ const LoginPage = (): JSX.Element => {
                 </Title>
                 <TextInput label="E-mail" required={true} type="email" {...form.getInputProps("email")} mb="sm" />
                 <PasswordInput label="Jelszó" required={true} {...form.getInputProps("password")} mb="md" />
-                <Button type="submit" loading={login.isLoading}>Belépés</Button>
+                <Button type="submit" loading={login.isLoading} mb="sm">Belépés</Button>
+                <Text align="center">Még nincs fiókod? <Anchor component={Link} to="/auth/register">Regisztrálj itt</Anchor></Text>
+                <Anchor align="center" component={Link} to="/">Vissza a kezdőlapra</Anchor>
             </form>
         </Center>
     );

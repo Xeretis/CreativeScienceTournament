@@ -1,6 +1,7 @@
-import { Button, Center, PasswordInput, TextInput, Title, createStyles } from "@mantine/core";
+import { Anchor, Button, Center, PasswordInput, Text, TextInput, Title, createStyles } from "@mantine/core";
 import { useForm, zodResolver } from "@mantine/form";
 
+import { Link } from "react-router-dom";
 import { ValidationError } from "../../utils/api";
 import { camelize } from "../../utils/string";
 import { useApiStore } from "../../stores/apiStore";
@@ -90,7 +91,9 @@ const RegisterPage = (): JSX.Element => {
                 <TextInput label="Felhasználónév" required={true} {...form.getInputProps("userName")} mb="sm" />
                 <PasswordInput label="Jelszó" required={true} {...form.getInputProps("password")} mb="sm" />
                 <PasswordInput label="Jelszó megerősítése" required={true} {...form.getInputProps("confirmPassword")} mb="md" />
-                <Button type="submit" loading={register.isLoading}>Regisztrálás</Button>
+                <Button type="submit" loading={register.isLoading} mb="sm">Regisztrálás</Button>
+                <Text align="center">Már van fiókod? <Anchor component={Link} to="/auth/login">Lépj be itt</Anchor></Text>
+                <Anchor align="center" component={Link} to="/">Vissza a kezdőlapra</Anchor>
             </form>
         </Center>
     );
