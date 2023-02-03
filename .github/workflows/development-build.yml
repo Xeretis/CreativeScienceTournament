@@ -19,5 +19,5 @@ jobs:
       - name: Install dependencies
         run: dotnet restore
       - name: Build
-        run: dotnet build --configuration Development --no-restore
+        run: dotnet build --configuration Debug --no-restore
   
