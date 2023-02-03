@@ -67,7 +67,7 @@ jobs:
             cd WebApp/ClientApp
             pnpm schema
             pnpm build
-      - name: Verify Changed files
+      - name: Verify changed files
         uses: tj-actions/verify-changed-files@v13
         id: verify-changed-files
         with:
