@@ -55,7 +55,7 @@ jobs:
       - name: Create Resources/Images directory
         run: mkdir -p WebApp/Resources/Images
       - name: Create test database
-        run: psql -h localhost -U postgres -c "CREATE DATABASE \"CreativeScienceTournaments\";"
+        run: psql -h localhost -U postgres -c "CREATE DATABASE \"CreativeScienceTournament\";"
       - name: Display dotnet version
         run: dotnet --version
       - name: Install dependencies
