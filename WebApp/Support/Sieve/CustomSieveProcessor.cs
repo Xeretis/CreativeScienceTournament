@@ -9,9 +9,10 @@ public class CustomSieveProcessor : SieveProcessor
 {
     public CustomSieveProcessor(
         IOptions<SieveOptions> options,
-        ISieveCustomSortMethods customSortMethods
+        ISieveCustomSortMethods customSortMethods,
+        ISieveCustomFilterMethods customFilterMethods
     )
-        : base(options, customSortMethods)
+        : base(options, customSortMethods, customFilterMethods)
     {
     }
 

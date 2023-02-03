@@ -47,10 +47,10 @@ const UsersPage = (): JSX.Element => {
                 onClose={() => setFilterOpened(false)}
                 title="Szűrés"
                 padding="lg"
-                size="lg"
+                size="xl"
                 position="right"
             >
-                {/* Drawer content */}
+                <Text color="dimmed">Ez a funkció hamarosan elérhető lesz</Text>
             </Drawer>
         </>
     );

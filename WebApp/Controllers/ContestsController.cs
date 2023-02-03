@@ -41,7 +41,7 @@ public class ContestsController : Controller
     public async Task<ActionResult<IEnumerable<IndexContestsResponse>>> IndexContests(
         [FromQuery] SieveModel sieveModel)
     {
-        var contests = _dbContext.Contests.AsNoTracking();
+        var contests = _dbContext.Contests.Include(c => c.Teams).AsNoTracking();
         var filteredContests = await _sieveProcessor.Apply(sieveModel, contests).ToListAsync();
 
         var response = _mapper.Map<IEnumerable<IndexContestsResponse>>(filteredContests);

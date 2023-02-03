@@ -14,12 +14,15 @@ const useStyles = createStyles((theme) => ({
 export const ContestCard = ({ contest }: { contest: IndexContestsResponse }): JSX.Element => {
     const { classes } = useStyles();
 
+    const isBefore = dayjs().isBefore(dayjs(contest.endDate));
+    const isLive = isBefore && dayjs().isAfter(dayjs(contest.startDate));
+
     return (
         <Card radius="md" shadow="sm">
             <Card.Section>
                 <AspectRatio ratio={16 / 9}>
                     <BackgroundImage src={contest.thumbnailUrl}>
-                        <Badge className={classes.badge}>Folyamatban</Badge>
+                        <Badge className={classes.badge} variant="filled" color={isLive ? "green" : (isBefore ? "yellow" : "red")}>{isLive ? "Folyamatban" : (isBefore ? "Hamarosan" : "Véget ért")}</Badge>
                     </BackgroundImage>
                 </AspectRatio>
             </Card.Section>
