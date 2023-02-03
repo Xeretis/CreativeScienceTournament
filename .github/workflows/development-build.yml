@@ -7,7 +7,18 @@ jobs:
     strategy:
       matrix:
         dotnet-version: [ '7.0' ]
-    
+    services:
+      postgres:
+        image: postgres
+        env:
+          POSTGRES_PASSWORD: ""
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
     steps:
       - uses: actions/checkout@v3
       - name: Setup .NET Core SDK ${{ matrix.dotnet-version }}
@@ -36,8 +47,14 @@ jobs:
           key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
           restore-keys: |
             ${{ runner.os }}-pnpm-store-
+      - name: Install psql
+        run: |
+          apt-get update
+          apt-get install --yes --no-install-recommends postgresql-client
       - name: Create Resources/Images directory
         run: mkdir -p WebApp/Resources/Images
+      - name: Create test database
+        run: psql -h localhost -U postgres -c "CREATE DATABASE \"CreativeScienceTournaments\";"
       - name: Display dotnet version
         run: dotnet --version
       - name: Install dependencies
