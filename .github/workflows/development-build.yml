@@ -36,6 +36,8 @@ jobs:
           key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
           restore-keys: |
             ${{ runner.os }}-pnpm-store-
+      - name: Create Resources/Images directory
+        run: mkdir -p WebApp/Resources/Images
       - name: Display dotnet version
         run: dotnet --version
       - name: Install dependencies
