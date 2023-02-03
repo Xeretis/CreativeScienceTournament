@@ -67,13 +67,21 @@ jobs:
             cd WebApp/ClientApp
             pnpm schema
             pnpm build
+      - name: Verify Changed files
+        uses: tj-actions/verify-changed-files@v13
+        id: verify-changed-files
+        with:
+          files: |
+            **/schema.json
       - name: Commit new schema
+        if: steps.verify-changed-files.outputs.files_changed == 'true'
         run: |
             git config --global user.email "github-actions[bot]@users.noreply.github.com"
             git config --global user.name "github-actions[bot]"
             git add WebApp/ClientApp/src/api/schema/v1/schema.json
             git commit -m "Update schema.json"
       - name: Push changes
+        if: steps.verify-changed-files.outputs.files_changed == 'true'
         uses: ad-m/github-push-action@master
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
