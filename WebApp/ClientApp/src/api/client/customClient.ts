@@ -6,7 +6,7 @@ type CustomClient<T> = (data: {
     method: "get" | "post" | "put" | "delete" | "patch";
     params?: Record<string, any>;
     headers?: Record<string, any>;
-    data?: BodyType<unknown>;
+    data?: BodyType<any>;
     signal?: AbortSignal;
 }) => Promise<T>;
 
