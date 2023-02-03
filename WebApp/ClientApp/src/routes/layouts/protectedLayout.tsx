@@ -10,7 +10,7 @@ import {
     IconUsers,
     TablerIconsProps
 } from "@tabler/icons-react";
-import { Outlet, useLocation } from "react-router-dom";
+import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import { closeAllModals, openModal } from "@mantine/modals";
 import { useDeleteApiAuthLogout, useGetApiAuthUser } from "../../api/client/auth/auth";
 import { useEffect, useState } from "react";
@@ -67,15 +67,16 @@ interface NavbarLinkProps {
   icon: React.ComponentType<TablerIconsProps>;
   label: string;
   active?: boolean;
-  onClick?(): void;
+  path: string;
 }
 
-const NavbarLink = ({ icon: Icon, label, active, onClick }: NavbarLinkProps) => {
+const NavbarLink = ({ icon: Icon, label, active, path }: NavbarLinkProps) => {
     const { classes, cx } = useStyles();
+    const navigate = useNavigate();
 
     return (
         <Tooltip label={label} position="right" transitionDuration={0}>
-            <UnstyledButton onClick={onClick} className={cx(classes.link, { [classes.active]: active })}>
+            <UnstyledButton onClick={() => navigate(path)} className={cx(classes.link, { [classes.active]: active })}>
                 <Icon stroke={1.5} />
             </UnstyledButton>
         </Tooltip>
@@ -219,7 +220,7 @@ const ProtectedNavbar = () => {
             {...link}
             key={link.label}
             active={index === active}
-            onClick={() => setActive(index)}
+            path={link.path}
         />
     ));
 

@@ -16,6 +16,7 @@ export const AppRouter = () => {
     const UnconfirmedEmailPage = lazy(() => import("../pages/auth/unconfirmedEmailPage"));
     const RegisterPage = lazy(() => import("../pages/auth/registerPage"));
     const HomePage = lazy(() => import("../pages/protected/homePage"));
+    const ContestsPage = lazy(() => import("../pages/protected/contestsPage"));
 
     return (
         <Suspense fallback={<FullScreenLoading />}>
@@ -29,6 +30,7 @@ export const AppRouter = () => {
                     <Route element={<RequireConfirmedEmail />}>
                         <Route element={<ProtectedLayout />}>
                             <Route path="/home" element={<HomePage />} />
+                            <Route path="/contests" element={<ContestsPage />} />
                         </Route>
                     </Route>
                     <Route element={<RequireUnconfirmedEmail />}>
