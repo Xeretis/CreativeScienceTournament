@@ -50,8 +50,8 @@ jobs:
             ${{ runner.os }}-pnpm-store-
       - name: Install psql
         run: |
-          apt-get update
-          apt-get install --yes --no-install-recommends postgresql-client
+          sudo apt-get update
+          sudo apt-get install --yes --no-install-recommends postgresql-client
       - name: Create Resources/Images directory
         run: mkdir -p WebApp/Resources/Images
       - name: Create test database
