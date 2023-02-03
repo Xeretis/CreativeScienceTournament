@@ -1,5 +1,5 @@
 name: Deploy to production server
-run-name: ${{ github.actor }} is doing a deploy to production 🛸
+run-name: ${{ github.actor }} is doing a deployment to production 🛸
 on: "workflow_dispatch"
 jobs:
   deploy-to-prod:
