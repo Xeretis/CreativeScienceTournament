@@ -83,7 +83,8 @@ try
 catch (Exception e)
 {
     var logger = app.Services.GetRequiredService<ILogger<Program>>();
-    logger.LogError("An error occurred while seeding the database", e);
+    logger.LogError("An error occurred while seeding the database");
+    logger.LogError(e.Message);
 }
 
 app.Run();
