@@ -45,7 +45,7 @@ const InviteMemberModalContent = (): JSX.Element => {
         }
         setError(null);
         try {
-            await inviteUser.mutateAsync({ userId: value, params: { inviteUrl: `${document.location.origin}/invite` } });
+            await inviteUser.mutateAsync({ userId: value, params: { inviteUrl: `${document.location.origin}/joinTeam` } });
             showNotification({
                 title: "Siker",
                 color: "green",
@@ -81,7 +81,7 @@ export const InviteTeamMemberCard = (): JSX.Element => {
     return (
         <Card onClick={openInviteMemberModal} p="md" radius="md" className={classes.card}>
             <Group position="apart">
-                <Text size="xl" weight={600} truncate={true}>Tag meghívása</Text>
+                <Text size="xl" weight={600} truncate={true}>Meghívás</Text>
                 <IconUserPlus />
             </Group>
         </Card>

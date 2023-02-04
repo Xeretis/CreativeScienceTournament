@@ -22,7 +22,7 @@ const ConfirmEmailPage = (): JSX.Element => {
 
     const confirm = async () => {
         try {
-            await confirmEmail.mutateAsync({ params: { token: encodeURIComponent(params.get("token")), userId: encodeURIComponent(params.get("userId")) } });
+            await confirmEmail.mutateAsync({ params: { token: encodeURIComponent(params.get("token")), userId: params.get("userId") } });
             showNotification({
                 title: "Siker",
                 color: "green",

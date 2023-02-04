@@ -15,6 +15,7 @@ export const AppRouter = () => {
     const ConfirmEmailPage = lazy(() => import("../pages/auth/confirmEmailPage"));
     const UnconfirmedEmailPage = lazy(() => import("../pages/auth/unconfirmedEmailPage"));
     const RegisterPage = lazy(() => import("../pages/auth/registerPage"));
+    const JoinTeamPage = lazy(() => import("../pages/joinTeamPage"));
     const HomePage = lazy(() => import("../pages/protected/homePage"));
     const ContestsPage = lazy(() => import("../pages/protected/contestsPage"));
 
@@ -38,6 +39,7 @@ export const AppRouter = () => {
                     </Route>
                 </Route>
                 <Route path="/auth/confirmEmail" element={<ConfirmEmailPage />} />
+                <Route path="/joinTeam" element={<JoinTeamPage />} />
             </Routes>
         </Suspense>
     );

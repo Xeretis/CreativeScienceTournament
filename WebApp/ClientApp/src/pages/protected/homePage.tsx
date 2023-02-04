@@ -22,7 +22,7 @@ const useStyles = createStyles((theme) => ({
         minHeight: "100%",
     },
     emptyXContainer: {
-        height: "100%",
+        flex: 1,
         flexDirection: "column",
     },
     pointsContainer: {
@@ -166,7 +166,7 @@ const HomePage = (): JSX.Element => {
                     {joinedContests.data.length === 0 && (
                         <Center className={classes.emptyXContainer} p="xl">
                             <Text pb="xs" align="center">
-                                Nincs folyamatban lévő versenyed.
+                                Nincs folyamatban levő versenyed.
                             </Text>
                             <Button component={Link} to="/contests" variant="light">
                                 Versenyek
