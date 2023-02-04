@@ -1,10 +1,10 @@
 import { Box, Button, Center, Group, Paper, SimpleGrid, Stack, Text, TextInput, Title, createStyles, useMantineTheme } from "@mantine/core";
+import { CreateTeamRequest, UpdateTeamRequest } from "../../api/client/model";
 import { QueryKey, useQueryClient } from "@tanstack/react-query";
 import { closeAllModals, openConfirmModal, openModal } from "@mantine/modals";
-import { useDeleteApiTeamsId, usePostApiTeams, usePostApiTeamsLeave } from "../../api/client/teams/teams";
+import { useDeleteApiTeamsId, usePatchApiTeamsId, usePostApiTeams, usePostApiTeamsLeave } from "../../api/client/teams/teams";
 import { useEffect, useState } from "react";
 
-import { CreateTeamRequest } from "../../api/client/model";
 import { FullScreenLoading } from "../../components/fullScreenLoading";
 import { InviteTeamMemberCard } from "../../components/inviteTeamMemberCard";
 import { JoinedContestCard } from "../../components/joinedContestCard";
@@ -78,6 +78,49 @@ const CreateTeamModalContent = ({ userKey }: { userKey: QueryKey }): JSX.Element
             <TextInput label="Csapatnév" {...form.getInputProps("name")} mb="sm" />
             <Button type="submit" fullWidth={true}>
                 Létrehozás
+            </Button>
+        </form>
+    );
+};
+
+const UpdateTeamModalContent = ({ teamId, userKey }: { teamId: number, userKey: QueryKey }): JSX.Element => {
+    const queryClient = useQueryClient();
+
+    const updateTeam = usePatchApiTeamsId();
+
+    const form = useForm<UpdateTeamRequest>({
+        initialValues: {
+            name: "",
+        },
+    });
+
+    const submit = form.onSubmit(async (values) => {
+        try {
+            await updateTeam.mutateAsync({ id: teamId, data: values });
+            queryClient.invalidateQueries(userKey);
+            closeAllModals();
+        } catch (error) {
+            if (error instanceof ValidationError) {
+                handleValidationErrors(error);
+            }
+        }
+    });
+
+    const handleValidationErrors = (error: ValidationError) => {
+        for (const validationError in error.errors) {
+            let message = "";
+            for (const err of error.errors[validationError]) {
+                message += `${err}\n`;
+            }
+            form.setFieldError(camelize(validationError), message);
+        }
+    };
+
+    return (
+        <form onSubmit={submit}>
+            <TextInput label="Csapatnév" {...form.getInputProps("name")} mb="sm" />
+            <Button type="submit" fullWidth={true}>
+                Mentés
             </Button>
         </form>
     );
@@ -163,6 +206,14 @@ const HomePage = (): JSX.Element => {
         });
     };
 
+    const openUpdateTeamModal = () => {
+        openModal({
+            title: "Csapat szerkesztése",
+            size: "lg",
+            children: <UpdateTeamModalContent teamId={user.data.team.id} userKey={user.queryKey} />,
+        });
+    };
+
     return (
         <>
             <SimpleGrid cols={2} className={classes.grid} breakpoints={[
@@ -213,7 +264,10 @@ const HomePage = (): JSX.Element => {
                                 {inviteCards()}
                             </Stack>
                             {isTeamCreator && (
-                                <Button color="red" fullWidth={true} onClick={openConfirmDeleteModal}>Csapat törlése</Button>
+                                <Group grow={true}>
+                                    <Button  fullWidth={true} onClick={openUpdateTeamModal}>Csapat szerkesztése</Button>
+                                    <Button color="red" fullWidth={true} onClick={openConfirmDeleteModal}>Csapat törlése</Button>
+                                </Group>
                             )}
                             {!isTeamCreator && (
                                 <Button color="red" fullWidth={true} onClick={openConfirmLeaveModal}>Csapat elhagyása</Button>
