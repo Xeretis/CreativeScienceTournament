@@ -220,7 +220,7 @@ const HomePage = (): JSX.Element => {
                 { maxWidth: 784, cols: 1, spacing: "sm" },
             ]}>
                 <Paper radius="md" p="lg" className={classes.sectionContainer}>
-                    <Title order={2} mb={joinedContests.data.length > 0 ? "md" : 0}>Folyamatban levő versenyeid</Title>
+                    <Title order={2} mb={joinedContests.data.length > 0 ? "md" : 0}>Versenyeid</Title>
                     {joinedContests.data.length === 0 && (
                         <Center className={classes.emptyXContainer} p="xl">
                             <Text pb="xs" align="center">
@@ -253,10 +253,11 @@ const HomePage = (): JSX.Element => {
                                 <Text size={theme.fontSizes.xl * 2} weight="bolder" align="center" inline={true}>{user.data.team.points}</Text>
                                 <Text size="sm" color="dimmed" align="center">pont</Text>
                             </Box>
-                            <Group position="apart" mb="md">
+                            <Group position="apart">
                                 <Text>A csapatod állapota:</Text>
                                 <Text weight="bold">{isTeamFull ? "Teljes" : "Hiányos"}</Text>
                             </Group>
+                            <Text mb="md">Csapattagok:</Text>
                             <Stack spacing="md" mb="md">
                                 {user.data.team.members.map((member) => (
                                     <TeamMemberCard key={member.id} teamMember={member} teamCreator={user.data.team.creatorId} />
