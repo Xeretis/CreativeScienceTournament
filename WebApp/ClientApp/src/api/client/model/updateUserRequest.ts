@@ -7,7 +7,7 @@
 
 export interface UpdateUserRequest {
   userName: string;
-  email: string;
+  email?: string | null;
   newPassword?: string | null;
   confirmNewPassword?: string | null;
   currentPassword?: string | null;
