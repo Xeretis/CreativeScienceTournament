@@ -130,6 +130,8 @@ public class UsersController : Controller
 
         _mapper.Map(request, user);
 
+        if (!string.IsNullOrEmpty(request.Email)) user.Email = request.Email;
+
         var result = await _userManager.UpdateAsync(user);
 
         if (!result.Succeeded)

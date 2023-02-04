@@ -5,7 +5,7 @@ namespace WebApp.Models.Requests;
 public class UpdateUserRequest
 {
     [Required] public string UserName { get; set; }
-    [Required] public string Email { get; set; }
+    public string Email { get; set; }
 
     public string? NewPassword { get; set; }
     public string? ConfirmNewPassword { get; set; }

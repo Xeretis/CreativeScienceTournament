@@ -18,6 +18,6 @@ public class ApiUserProfile : Profile
         CreateMap<ApiUser, UserResponseTeamUser>();
 
         CreateMap<CreateUserRequest, ApiUser>();
-        CreateMap<UpdateUserRequest, ApiUser>();
+        CreateMap<UpdateUserRequest, ApiUser>().ForMember(r => r.Email, o => o.Ignore());
     }
 }

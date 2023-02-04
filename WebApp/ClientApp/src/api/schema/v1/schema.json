@@ -1954,7 +1954,6 @@
       },
       "UpdateUserRequest": {
         "required": [
-          "email",
           "userName"
         ],
         "type": "object",
@@ -1964,8 +1963,8 @@
             "type": "string"
           },
           "email": {
-            "minLength": 1,
-            "type": "string"
+            "type": "string",
+            "nullable": true
           },
           "newPassword": {
             "type": "string",
