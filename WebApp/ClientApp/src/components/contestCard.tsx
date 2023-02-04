@@ -1,4 +1,4 @@
-import { AspectRatio, BackgroundImage, Badge, Box, Card, Image, Text, Title, createStyles } from "@mantine/core";
+import { AspectRatio, BackgroundImage, Badge, Box, Card, Image, Text, Title, createStyles, useMantineTheme } from "@mantine/core";
 
 import { IndexContestsResponse } from "../api/client/model";
 import dayjs from "dayjs";
@@ -13,12 +13,13 @@ const useStyles = createStyles((theme) => ({
 
 export const ContestCard = ({ contest }: { contest: IndexContestsResponse }): JSX.Element => {
     const { classes } = useStyles();
+    const theme = useMantineTheme();
 
     const isBefore = dayjs().isBefore(dayjs(contest.endDate));
     const isLive = isBefore && dayjs().isAfter(dayjs(contest.startDate));
 
     return (
-        <Card radius="md" shadow="sm">
+        <Card radius="md" shadow="sm" withBorder={theme.colorScheme !== "dark"}>
             <Card.Section>
                 <AspectRatio ratio={16 / 9}>
                     <BackgroundImage src={contest.thumbnailUrl}>

@@ -16,14 +16,20 @@ import { useForm } from "@mantine/form";
 import { useGetApiAuthUser } from "../../api/client/auth/auth";
 import { useGetApiContests } from "../../api/client/contests/contests";
 import { useIsTeamCreator } from "../../hooks/useIsTeamCreator";
+import { useIsTeamFull } from "../../hooks/useIsTeamFull";
 
 const useStyles = createStyles((theme) => ({
     grid: {
         minHeight: "100%",
     },
     emptyXContainer: {
-        flex: 1,
+        minHeight: "100%",
         flexDirection: "column",
+
+        [`@media (max-width: ${theme.breakpoints.sm}px)`]: {
+            flex: 1,
+            minHeight: "unset",
+        }
     },
     pointsContainer: {
         width: "100%",
@@ -90,6 +96,7 @@ const HomePage = (): JSX.Element => {
     const deleteTeam = useDeleteApiTeamsId();
 
     const isTeamCreator = useIsTeamCreator(user.data);
+    const isTeamFull = useIsTeamFull(user.data);
 
     const [fetchedJoinedContests, setFetchedJoinedContests] = useState(false);
 
@@ -166,7 +173,7 @@ const HomePage = (): JSX.Element => {
                     {joinedContests.data.length === 0 && (
                         <Center className={classes.emptyXContainer} p="xl">
                             <Text pb="xs" align="center">
-                                Nincs folyamatban levő versenyed.
+                                Még nem csatlakoztál folyamatban levő versenyhez.
                             </Text>
                             <Button component={Link} to="/contests" variant="light">
                                 Versenyek
@@ -197,7 +204,7 @@ const HomePage = (): JSX.Element => {
                             </Box>
                             <Group position="apart" mb="md">
                                 <Text>A csapatod állapota:</Text>
-                                <Text weight="bold">{user.data.team.members.length === 3 ? "Teljes" : "Hiányos"}</Text>
+                                <Text weight="bold">{isTeamFull ? "Teljes" : "Hiányos"}</Text>
                             </Group>
                             <Stack spacing="md" mb="md">
                                 {user.data.team.members.map((member) => (

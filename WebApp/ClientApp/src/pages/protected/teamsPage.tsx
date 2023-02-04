@@ -1,41 +1,31 @@
 import { ActionIcon, Box, Drawer, Group, SimpleGrid, Text, Title, createStyles, useMantineTheme } from "@mantine/core";
 
-import { ContestCard } from "../../components/contestCard";
 import { FullScreenLoading } from "../../components/fullScreenLoading";
 import { IconFilter } from "@tabler/icons-react";
-import { useGetApiAuthUser } from "../../api/client/auth/auth";
-import { useGetApiContests } from "../../api/client/contests/contests";
-import { useIsAdmin } from "../../hooks/useIsAdmin";
+import { TeamCard } from "../../components/teamCard";
+import { useGetApiTeams } from "../../api/client/teams/teams";
 import { useState } from "react";
 
 const useStyles = createStyles((theme) => ({}));
 
-const ContestsPage = (): JSX.Element => {
+const TeamsPage = (): JSX.Element => {
     const { classes } = useStyles();
-
-    const user = useGetApiAuthUser();
-    const isUserAdmin = useIsAdmin(user.data);
-
-    const contests = useGetApiContests();
     const theme = useMantineTheme();
 
     const [filterOpened, setFilterOpened] = useState(false);
 
-    if (user.isLoading || contests.isLoading) {
+    const teams = useGetApiTeams({ Sorts: "-Points" });
+
+    if (teams.isLoading) {
         return <FullScreenLoading />;
     }
 
     return (
         <>
             <Group position="apart" align="baseline">
-                <Title mb="md">Versenyek</Title>
+                <Title mb="md">Csapatok</Title>
                 <ActionIcon size="lg" onClick={() => setFilterOpened(!filterOpened)}><IconFilter size={28} color={theme.colorScheme === "dark" ? "white" : "black"} /></ActionIcon>
             </Group>
-            {contests.data.length === 0 && (
-                <Text color="dimmed">
-                   Úgy néz ki nincs a keresésednek megfelő verseny. Gyere vissza később, hátha akkor lesz.
-                </Text>
-            )}
             <SimpleGrid
                 cols={4}
                 spacing="lg"
@@ -44,9 +34,11 @@ const ContestsPage = (): JSX.Element => {
                     { maxWidth: 1184, cols: 2, spacing: "sm" },
                     { maxWidth: 784, cols: 1, spacing: "sm" },
                 ]}
-            >{contests.data.map((contest) => (
-                    <ContestCard key={contest.id} contest={contest} />
-                ))}</SimpleGrid>
+            >
+                {teams.data.map((team, index) => (
+                    <TeamCard key={team.id} team={team} medal={index < 3} />
+                ))}
+            </SimpleGrid>
             <Drawer
                 opened={filterOpened}
                 onClose={() => setFilterOpened(false)}
@@ -57,8 +49,7 @@ const ContestsPage = (): JSX.Element => {
             >
                 <Text color="dimmed">Ez a funkció hamarosan elérhető lesz</Text>
             </Drawer>
-        </>
-    );
+        </>);
 };
 
-export default ContestsPage;
+export default TeamsPage;
