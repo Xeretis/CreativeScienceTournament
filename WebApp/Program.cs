@@ -80,10 +80,10 @@ try
     await AuthSeeder.SeedRoles(app.Services);
     await AuthSeeder.SeedAdmin(app.Services, builder.Configuration);
 }
-catch
+catch (Exception e)
 {
     var logger = app.Services.GetRequiredService<ILogger<Program>>();
-    logger.LogError("An error occurred while seeding the database");
+    logger.LogError("An error occurred while seeding the database", e);
 }
 
 app.Run();

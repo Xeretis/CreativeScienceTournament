@@ -220,7 +220,7 @@ const HomePage = (): JSX.Element => {
                 { maxWidth: 784, cols: 1, spacing: "sm" },
             ]}>
                 <Paper radius="md" p="lg" className={classes.sectionContainer}>
-                    <Title order={2} mb={joinedContests.data.length > 0 ? "md" : 0}>Versenyeid</Title>
+                    <Title order={2} mb={joinedContests.data.length > 0 ? "md" : 0}>A versenyeid</Title>
                     {joinedContests.data.length === 0 && (
                         <Center className={classes.emptyXContainer} p="xl">
                             <Text pb="xs" align="center">
