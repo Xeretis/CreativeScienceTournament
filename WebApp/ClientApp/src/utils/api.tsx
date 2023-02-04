@@ -12,7 +12,15 @@ export class NotFoundError {
 export const handleApiErrors = (error: any) => {
     switch (error.status) {
     case 400:
-        throw new ValidationError(error.data.message ?? "Validációs hiba történt", error.data.errors ?? []);
+        if (error.data?.message) {
+            showNotification({
+                title: "Hiba (400)",
+                color: "red",
+                icon: <IconX />,
+                message: error.data.message,
+            });
+        }
+        throw new ValidationError("Validációs hiba történt", error.data.errors ?? []);
     case 401:
         showNotification({
             title: "Hiba (401)",

@@ -29,7 +29,7 @@ export const ContestCard = ({ contest }: { contest: IndexContestsResponse }): JS
             <Card.Section p="sm">
                 <Text size="xl" weight={600} truncate={true}>{contest.topic}</Text>
                 <Text size="sm" color="dimmed" truncate={true}> {contest.description}</Text>
-                <Text size="sm">{dayjs(contest.startDate).format("YYYY. MM. DD.")} - {dayjs(contest.endDate).format("YYYY. MM. DD.")} </Text>
+                <Text size="sm">{dayjs(contest.startDate).format("YYYY. MM. DD.")} - {dayjs(contest.endDate).format("YYYY. MM. DD.")}</Text>
             </Card.Section>
         </Card>
     );

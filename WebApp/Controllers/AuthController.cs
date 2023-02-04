@@ -121,7 +121,8 @@ public class AuthController : Controller
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult<UserResponse>> GetUser()
     {
-        var user = await _dbContext.Users.Include(u => u.Team).ThenInclude(t => t.PointEntries)
+        var user = await _dbContext.Users.Include(u => u.Team).ThenInclude(t => t.PointEntries).Include(u => u.Team)
+            .ThenInclude(t => t.Members)
             .FirstOrDefaultAsync(u => u.Id == User.GetId());
 
         var response = _mapper.Map<UserResponse>(user);
