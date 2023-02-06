@@ -15,8 +15,8 @@ export const useCustomClient = <T>(): CustomClient<T> => {
         try {
             const response = await fetch(`${url}?${new URLSearchParams(params)}`, {
                 method: method.toUpperCase(),
-                headers: { ...data?.headers, "Content-Type": "application/json", Accept: "application/json" },
-                ...(data ? { body: JSON.stringify(data) } : {}),
+                headers: { ...data?.headers, Accept: "application/json" },
+                ...(data ? { body: data instanceof FormData ? data : JSON.stringify(data) } : {}),
 
             });
 
