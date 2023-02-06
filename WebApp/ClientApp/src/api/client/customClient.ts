@@ -13,9 +13,16 @@ type CustomClient<T> = (data: {
 export const useCustomClient = <T>(): CustomClient<T> => {
     return async ({ url, method, params, data }) => {
         try {
+            let headers;
+            if (data instanceof FormData) {
+                headers = { Accept: "application/json" };
+            } else {
+                headers = { ...data?.headers, "Content-Type": "application/json", Accept: "application/json" };
+            }
+
             const response = await fetch(`${url}?${new URLSearchParams(params)}`, {
                 method: method.toUpperCase(),
-                headers: { ...data?.headers, Accept: "application/json" },
+                headers,
                 ...(data ? { body: data instanceof FormData ? data : JSON.stringify(data) } : {}),
 
             });
