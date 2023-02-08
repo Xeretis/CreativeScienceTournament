@@ -170,7 +170,7 @@ public class ContestsController : Controller
     }
 
     [ServiceFilter(typeof(RequireFullTeamActionFilter))]
-    [HttpPost("{id}/Leave")]
+    [HttpDelete("{id}/Leave")]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
@@ -199,6 +199,26 @@ public class ContestsController : Controller
     }
 
     [ServiceFilter(typeof(RequireFullTeamActionFilter))]
+    [HttpGet("{id}/TeamStatus")]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    public async Task<ActionResult<ViewTeamStatusResponse>> ViewTeamStatus([FromRoute] int id)
+    {
+        var contest = await _dbContext.Contests.Include(c => c.Teams).FirstOrDefaultAsync(c => c.Id == id);
+
+        if (contest == null) return NotFound();
+
+        var user = await _dbContext.Users.FindAsync(User.GetId());
+
+        var response = new ViewTeamStatusResponse
+        {
+            Joined = contest.Teams.Any(t => t.Id == user.TeamId)
+        };
+
+        return response;
+    }
+
+    [ServiceFilter(typeof(RequireFullTeamActionFilter))]
     [HttpGet("{id}/Exercise")]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -209,7 +229,7 @@ public class ContestsController : Controller
 
         if (contest == null) return NotFound();
 
-        var user = await _dbContext.Users.Include(u => u.Team).FirstOrDefaultAsync(u => u.Id == User.GetId());
+        var user = await _dbContext.Users.FindAsync(User.GetId());
 
         if (contest.Teams.All(t => t.Id != user.TeamId))
             return BadRequest(new { Message = "A csapatod nem csatlakozott a versenyhez" });

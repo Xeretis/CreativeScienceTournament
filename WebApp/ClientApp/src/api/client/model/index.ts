@@ -37,4 +37,5 @@ export * from './viewContestResponse';
 export * from './viewContestResponseTeam';
 export * from './viewTeamResponse';
 export * from './viewTeamResponseUser';
+export * from './viewTeamStatusResponse';
 export * from './viewUserResponse';

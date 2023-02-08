@@ -22,7 +22,8 @@ import type {
   ViewContestResponse,
   ProblemDetails,
   PostApiContestsBody,
-  PatchApiContestsIdBody
+  PatchApiContestsIdBody,
+  ViewTeamStatusResponse
 } from '.././model'
 import { useCustomClient } from '.././customClient';
 import type { ErrorType, BodyType } from '.././customClient';
@@ -298,14 +299,14 @@ formData.append('EndDate', patchApiContestsIdBody.EndDate)
 
       return useMutation<Awaited<ReturnType<typeof postApiContestsIdJoin>>, TError, {id: number}, TContext>(mutationFn, mutationOptions);
     }
-    export const usePostApiContestsIdLeaveHook = () => {
-        const postApiContestsIdLeave = useCustomClient<void>();
+    export const useDeleteApiContestsIdLeaveHook = () => {
+        const deleteApiContestsIdLeave = useCustomClient<void>();
 
         return (
     id: number,
  ) => {
-        return postApiContestsIdLeave(
-          {url: `/Api/Contests/${id}/Leave`, method: 'post'
+        return deleteApiContestsIdLeave(
+          {url: `/Api/Contests/${id}/Leave`, method: 'delete'
     },
           );
         }
@@ -313,30 +314,75 @@ formData.append('EndDate', patchApiContestsIdBody.EndDate)
     
 
 
-    export type PostApiContestsIdLeaveMutationResult = NonNullable<Awaited<ReturnType<ReturnType<typeof usePostApiContestsIdLeaveHook>>>>
+    export type DeleteApiContestsIdLeaveMutationResult = NonNullable<Awaited<ReturnType<ReturnType<typeof useDeleteApiContestsIdLeaveHook>>>>
     
-    export type PostApiContestsIdLeaveMutationError = ErrorType<ProblemDetails>
+    export type DeleteApiContestsIdLeaveMutationError = ErrorType<ProblemDetails>
 
-    export const usePostApiContestsIdLeave = <TError = ErrorType<ProblemDetails>,
+    export const useDeleteApiContestsIdLeave = <TError = ErrorType<ProblemDetails>,
     
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<ReturnType<typeof usePostApiContestsIdLeaveHook>>>, TError,{id: number}, TContext>, }
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<ReturnType<typeof useDeleteApiContestsIdLeaveHook>>>, TError,{id: number}, TContext>, }
 ) => {
       const {mutation: mutationOptions} = options ?? {};
 
-      const postApiContestsIdLeave =  usePostApiContestsIdLeaveHook()
+      const deleteApiContestsIdLeave =  useDeleteApiContestsIdLeaveHook()
 
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<ReturnType<typeof usePostApiContestsIdLeaveHook>>>, {id: number}> = (props) => {
+      const mutationFn: MutationFunction<Awaited<ReturnType<ReturnType<typeof useDeleteApiContestsIdLeaveHook>>>, {id: number}> = (props) => {
           const {id} = props ?? {};
 
-          return  postApiContestsIdLeave(id,)
+          return  deleteApiContestsIdLeave(id,)
         }
 
         
 
-      return useMutation<Awaited<ReturnType<typeof postApiContestsIdLeave>>, TError, {id: number}, TContext>(mutationFn, mutationOptions);
+      return useMutation<Awaited<ReturnType<typeof deleteApiContestsIdLeave>>, TError, {id: number}, TContext>(mutationFn, mutationOptions);
     }
-    export const useGetApiContestsIdExerciseHook = () => {
+    export const useGetApiContestsIdTeamStatusHook = () => {
+        const getApiContestsIdTeamStatus = useCustomClient<ViewTeamStatusResponse>();
+
+        return (
+    id: number,
+ signal?: AbortSignal
+) => {
+        return getApiContestsIdTeamStatus(
+          {url: `/Api/Contests/${id}/TeamStatus`, method: 'get', signal
+    },
+          );
+        }
+      }
+    
+
+export const getGetApiContestsIdTeamStatusQueryKey = (id: number,) => [`/Api/Contests/${id}/TeamStatus`];
+
+    
+export type GetApiContestsIdTeamStatusQueryResult = NonNullable<Awaited<ReturnType<ReturnType<typeof useGetApiContestsIdTeamStatusHook>>>>
+export type GetApiContestsIdTeamStatusQueryError = ErrorType<ProblemDetails>
+
+export const useGetApiContestsIdTeamStatus = <TData = Awaited<ReturnType<ReturnType<typeof useGetApiContestsIdTeamStatusHook>>>, TError = ErrorType<ProblemDetails>>(
+ id: number, options?: { query?:UseQueryOptions<Awaited<ReturnType<ReturnType<typeof useGetApiContestsIdTeamStatusHook>>>, TError, TData>, }
+
+  ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } => {
+
+  const {query: queryOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetApiContestsIdTeamStatusQueryKey(id);
+
+  const getApiContestsIdTeamStatus =  useGetApiContestsIdTeamStatusHook();
+
+
+  const queryFn: QueryFunction<Awaited<ReturnType<ReturnType<typeof useGetApiContestsIdTeamStatusHook>>>> = ({ signal }) => getApiContestsIdTeamStatus(id, signal);
+
+
+  
+
+  const query = useQuery<Awaited<ReturnType<ReturnType<typeof useGetApiContestsIdTeamStatusHook>>>, TError, TData>(queryKey, queryFn, {enabled: !!(id), ...queryOptions}) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  query.queryKey = queryKey;
+
+  return query;
+}
+
+export const useGetApiContestsIdExerciseHook = () => {
         const getApiContestsIdExercise = useCustomClient<void>();
 
         return (

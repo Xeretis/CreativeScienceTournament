@@ -1010,7 +1010,7 @@
       }
     },
     "/Api/Contests/{id}/Leave": {
-      "post": {
+      "delete": {
         "tags": [
           "Contests"
         ],
@@ -1049,6 +1049,47 @@
           },
           "204": {
             "description": "No Content"
+          }
+        }
+      }
+    },
+    "/Api/Contests/{id}/TeamStatus": {
+      "get": {
+        "tags": [
+          "Contests"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "style": "simple",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ViewTeamStatusResponse"
+                }
+              }
+            }
           }
         }
       }
@@ -2213,6 +2254,15 @@
           "userName": {
             "type": "string",
             "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "ViewTeamStatusResponse": {
+        "type": "object",
+        "properties": {
+          "joined": {
+            "type": "boolean"
           }
         },
         "additionalProperties": false
