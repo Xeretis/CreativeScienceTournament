@@ -180,7 +180,7 @@ const ProtectedNavbar = () => {
     const { classes } = useStyles();
     const theme = useMantineTheme();
 
-    const { colorScheme, toggleColorScheme } = useMantineColorScheme();
+    const { toggleColorScheme } = useMantineColorScheme();
 
     const [active, setActive] = useState(0);
 
