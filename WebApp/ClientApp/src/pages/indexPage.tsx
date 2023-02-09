@@ -1,5 +1,6 @@
 import { Box, Button, Center, Group, Text, Title, createStyles, keyframes, useMantineTheme } from "@mantine/core";
 
+import { ColorSchemeToggle } from "../components/colorSchemeToggle";
 import { IconAtom } from "@tabler/icons-react";
 import { Link } from "react-router-dom";
 
@@ -21,8 +22,6 @@ const useStyles = createStyles((theme) => ({
         top: 0,
         left: 0,
         right: 0,
-        display: "flex",
-        justifyContent: "flex-end",
     },
     title: {
         wordSpacing: "100vw",
@@ -61,9 +60,12 @@ const IndexPage = (): JSX.Element => {
     return (
         <>
             <Box className={classes.header} p="sm">
-                <Group>
-                    <Button component={Link} to="/auth/login">Belépés</Button>
-                    <Button component={Link} to="/auth/register">Regisztrálás</Button>
+                <Group position="apart">
+                    <ColorSchemeToggle />
+                    <Group>
+                        <Button component={Link} to="/auth/login">Belépés</Button>
+                        <Button component={Link} to="/auth/register">Regisztrálás</Button>
+                    </Group>
                 </Group>
             </Box>
             <Box className={classes.titleContainer} p="xl">

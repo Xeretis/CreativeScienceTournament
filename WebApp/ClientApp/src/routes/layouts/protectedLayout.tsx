@@ -1,9 +1,10 @@
-import { AppShell, Button, Center, Indicator, LoadingOverlay, Navbar, PasswordInput, Stack, TextInput, Tooltip, UnstyledButton, createStyles, useMantineTheme } from "@mantine/core";
+import { AppShell, Button, Center, Indicator, LoadingOverlay, Navbar, PasswordInput, Stack, TextInput, Tooltip, UnstyledButton, createStyles, useMantineColorScheme, useMantineTheme } from "@mantine/core";
 import {
     IconAtom,
     IconCheck,
     IconHome2,
     IconLogout,
+    IconPaint,
     IconTrophy,
     IconUser,
     IconUserSearch,
@@ -16,6 +17,7 @@ import { useDeleteApiAuthLogout, useGetApiAuthUser } from "../../api/client/auth
 import { useEffect, useState } from "react";
 import { useForm, zodResolver } from "@mantine/form";
 
+import { ColorSchemeToggle } from "../../components/colorSchemeToggle";
 import { UpdateUserRequest } from "../../api/client/model";
 import { ValidationError } from "../../utils/api";
 import { camelize } from "../../utils/string";
@@ -178,6 +180,8 @@ const ProtectedNavbar = () => {
     const { classes } = useStyles();
     const theme = useMantineTheme();
 
+    const { colorScheme, toggleColorScheme } = useMantineColorScheme();
+
     const [active, setActive] = useState(0);
 
     const location = useLocation();
@@ -236,6 +240,11 @@ const ProtectedNavbar = () => {
             </Navbar.Section>
             <Navbar.Section>
                 <Stack justify="center" spacing={0}>
+                    <Tooltip label="Téma váltás" position="right" transitionDuration={0}>
+                        <UnstyledButton onClick={() => toggleColorScheme()} className={classes.link}>
+                            <IconPaint stroke={1.5} />
+                        </UnstyledButton>
+                    </Tooltip>
                     <Tooltip label="Fiók" position="right" transitionDuration={0}>
                         <UnstyledButton onClick={openUpdateUserModal} className={classes.link}>
                             <Indicator disabled={!isUserAdmin}>
