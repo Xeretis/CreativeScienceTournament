@@ -1,4 +1,4 @@
-import { Box, Button, Center, Group, Text, Title, createStyles, keyframes, useMantineTheme } from "@mantine/core";
+import { Box, Button, Group, Text, Title, createStyles, keyframes, useMantineTheme } from "@mantine/core";
 
 import { ColorSchemeToggle } from "../components/colorSchemeToggle";
 import { IconAtom } from "@tabler/icons-react";

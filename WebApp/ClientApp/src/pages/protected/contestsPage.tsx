@@ -120,7 +120,7 @@ const ContestsPage = (): JSX.Element => {
                     { maxWidth: 784, cols: 1, spacing: "sm" },
                 ]}
             >{contests.data.map((contest) => (
-                    <ContestCard key={contest.id} contest={contest} />
+                    <ContestCard key={contest.id} contest={contest} contestsKey={contests.queryKey} />
                 ))}</SimpleGrid>
             <Drawer
                 opened={filterOpened}

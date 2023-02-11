@@ -17,7 +17,6 @@ import { useDeleteApiAuthLogout, useGetApiAuthUser } from "../../api/client/auth
 import { useEffect, useState } from "react";
 import { useForm, zodResolver } from "@mantine/form";
 
-import { ColorSchemeToggle } from "../../components/colorSchemeToggle";
 import { UpdateUserRequest } from "../../api/client/model";
 import { ValidationError } from "../../utils/api";
 import { camelize } from "../../utils/string";

@@ -1,15 +1,21 @@
 import "dayjs/locale/hu";
 
-import { AspectRatio, BackgroundImage, Badge, Box, Button, Card, Group, Image, LoadingOverlay, Text, Title, createStyles, useMantineTheme } from "@mantine/core";
-import { useDeleteApiContestsIdLeave, useGetApiContestsIdTeamStatus, usePostApiContestsIdJoin } from "../api/client/contests/contests";
+import { AspectRatio, BackgroundImage, Badge, Box, Button, Card, FileInput, Group, Image, LoadingOverlay, NumberInput, Text, TextInput, Title, createStyles, useMantineTheme } from "@mantine/core";
+import { IndexContestsResponse, PatchApiContestsIdBody } from "../api/client/model";
+import { QueryKey, useQueryClient } from "@tanstack/react-query";
+import { closeAllModals, openConfirmModal, openModal } from "@mantine/modals";
+import { useDeleteApiContestsId, useDeleteApiContestsIdLeave, useGetApiContestsIdTeamStatus, usePatchApiContestsId, usePostApiContestsIdJoin } from "../api/client/contests/contests";
 import { useEffect, useState } from "react";
 
+import { DatePicker } from "@mantine/dates";
 import { IconCheck } from "@tabler/icons-react";
-import { IndexContestsResponse } from "../api/client/model";
+import { ValidationError } from "../utils/api";
 import dayjs from "dayjs";
-import { openModal } from "@mantine/modals";
 import relativeTime from "dayjs/plugin/relativeTime";
 import { showNotification } from "@mantine/notifications";
+import { useForm } from "@mantine/form";
+import { useGetApiAuthUser } from "../api/client/auth/auth";
+import { useIsAdmin } from "../hooks/useIsAdmin";
 
 dayjs.extend(relativeTime);
 
@@ -24,8 +30,13 @@ const useStyles = createStyles((theme) => ({
     }
 }));
 
-const ViewContestModal = ({ contest }: { contest: IndexContestsResponse }): JSX.Element => {
+const ViewContestModal = ({ contest, contestsKey }: { contest: IndexContestsResponse, contestsKey: QueryKey }): JSX.Element => {
     const theme = useMantineTheme();
+
+    const queryClient = useQueryClient();
+
+    const user = useGetApiAuthUser();
+    const isAdmin = useIsAdmin(user.data);
 
     const [joined, setJoined] = useState(false);
     const [didSetJoined, setDidSetJoined] = useState(false);
@@ -34,6 +45,61 @@ const ViewContestModal = ({ contest }: { contest: IndexContestsResponse }): JSX.
 
     const joinContest = usePostApiContestsIdJoin();
     const leaveContest = useDeleteApiContestsIdLeave();
+    const updateContest = usePatchApiContestsId();
+    const deleteContest = useDeleteApiContestsId();
+
+    const form = useForm({
+        initialValues: {
+            Topic: contest.topic,
+            Description: contest.description,
+            MaxPoints: 0,
+            Exercise: null,
+            Thumbnail: null,
+            StartDate: new Date(contest.startDate),
+            EndDate: new Date(contest.endDate),
+        },
+    });
+
+    const submit = form.onSubmit(async (values) => {
+        try {
+            const StartDate = values.StartDate.toISOString();
+            const EndDate = values.EndDate.toISOString();
+            await updateContest.mutateAsync({ id: contest.id, data: { ...values, StartDate, EndDate } as PatchApiContestsIdBody });
+            queryClient.invalidateQueries(contestsKey);
+            closeAllModals();
+        } catch (error) {
+            if (error instanceof ValidationError) {
+                handleValidationErrors(error);
+            }
+        }
+    });
+
+    const handleValidationErrors = (error: ValidationError) => {
+        for (const validationError in error.errors) {
+            let message = "";
+            for (const err of error.errors[validationError]) {
+                message += `${err}\n`;
+            }
+            form.setFieldError(validationError, message);
+        }
+    };
+
+    const openConfirmDeleteModal = async () => {
+        openConfirmModal({
+            title: "Biztosan törölni szeretnéd a versenyt?",
+            children: (
+                <Text size="sm">
+                Biztos, hogy törölni akarod ezt a versenyt? Ez a művelet nem visszavonható.
+                </Text>
+            ),
+            labels: { confirm: "Verseny törlése", cancel: "Mégse" },
+            onConfirm: async () => {
+                await deleteContest.mutateAsync({ id: contest.id });
+                queryClient.invalidateQueries(contestsKey);
+                closeAllModals();
+            },
+        });
+    };
 
     const joinOrLeave = async () => {
         if (joined) {
@@ -76,6 +142,21 @@ const ViewContestModal = ({ contest }: { contest: IndexContestsResponse }): JSX.
                 <Text>{dayjs().isBefore(contest.startDate) ? "Kezdete" : "Vége"}</Text>
                 <Text weight={600}>{dayjs().isBefore(contest.startDate) ? dayjs(contest.startDate).locale("hu").fromNow() : dayjs(contest.endDate).locale("hu").fromNow()}</Text>
             </Group>
+            {isAdmin && (
+                <form onSubmit={submit}>
+                    <TextInput label="Téma" {...form.getInputProps("Topic")} mb="sm" />
+                    <TextInput label="Leírás" {...form.getInputProps("Description")} mb="sm" />
+                    <NumberInput required={true} label="Max pontszám" {...form.getInputProps("MaxPoints")} mb="sm" />
+                    <FileInput clearable={true} label="Új feladat" {...form.getInputProps("Exercise")} mb="sm" />
+                    <FileInput clearable={true} label="Új Borítókép" placeholder={contest.thumbnailUrl} {...form.getInputProps("Thumbnail")} mb="sm" />
+                    <DatePicker required={true} label="Kezdés dátuma" {...form.getInputProps("StartDate")} mb="sm" />
+                    <DatePicker required={true} label="Befejezés dátuma" {...form.getInputProps("EndDate")} mb="sm" />
+                    <Group grow={true} position="apart" mb="sm">
+                        <Button fullWidth={true} type="submit">Mentés</Button>
+                        <Button fullWidth={true} color="red" onClick={openConfirmDeleteModal}>Verseny törlése</Button>
+                    </Group>
+                </form>
+            )}
             <Button fullWidth={true} color={joined ? "red" : theme.primaryColor}
                 onClick={joinOrLeave}
                 disabled={dayjs().isBefore(contest.startDate) || dayjs().isAfter(contest.endDate)}
@@ -84,7 +165,7 @@ const ViewContestModal = ({ contest }: { contest: IndexContestsResponse }): JSX.
     );
 };
 
-export const ContestCard = ({ contest }: { contest: IndexContestsResponse }): JSX.Element => {
+export const ContestCard = ({ contest, contestsKey }: { contest: IndexContestsResponse, contestsKey: QueryKey }): JSX.Element => {
     const { classes } = useStyles();
     const theme = useMantineTheme();
 
@@ -95,7 +176,7 @@ export const ContestCard = ({ contest }: { contest: IndexContestsResponse }): JS
         openModal({
             title: contest.topic,
             size: "lg",
-            children: <ViewContestModal contest={contest} />,
+            children: <ViewContestModal contest={contest} contestsKey={contestsKey} />,
         });
     };
 
