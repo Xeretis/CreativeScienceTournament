@@ -1,6 +1,7 @@
 import { Anchor, Button, Center, PasswordInput, Text, TextInput, Title, createStyles } from "@mantine/core";
 import { useForm, zodResolver } from "@mantine/form";
 
+import { CreateUserRequest } from "../../api/client/model";
 import { Link } from "react-router-dom";
 import { ValidationError } from "../../utils/api";
 import { camelize } from "../../utils/string";
@@ -44,7 +45,7 @@ const RegisterPage = (): JSX.Element => {
     const register = usePostApiUsers();
     const login = usePostApiAuthLogin();
 
-    const form = useForm({
+    const form = useForm<CreateUserRequest>({
         initialValues: {
             email: "",
             userName: "",
