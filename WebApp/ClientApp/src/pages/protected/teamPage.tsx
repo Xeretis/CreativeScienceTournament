@@ -123,8 +123,8 @@ export const TeamPage = (): JSX.Element => {
 
     return (
         <>
-            <Group position="apart" align="start">
-                <Title mb="md" truncate={true} className={classes.teamName}>{team.data.name}</Title>
+            <Group position="apart" align="start" mb="md">
+                <Title truncate={true} className={classes.teamName}>{team.data.name}</Title>
                 <Group position="apart" spacing="xs" mt={6}>
                     {isAdmin && <Button onClick={openUpdateTeamModal}>Módosítás</Button>}
                     {isAdmin && <Button color="red" onClick={openConfirmDeleteModal}>Törlés</Button>}

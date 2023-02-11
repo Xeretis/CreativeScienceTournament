@@ -22,8 +22,8 @@ const TeamsPage = (): JSX.Element => {
 
     return (
         <>
-            <Group position="apart" align="baseline">
-                <Title mb="md">Csapatok</Title>
+            <Group position="apart" align="baseline" mb="md">
+                <Title>Csapatok</Title>
                 <ActionIcon size="lg" onClick={() => setFilterOpened(!filterOpened)}><IconFilter size={28} color={theme.colorScheme === "dark" ? "white" : "black"} /></ActionIcon>
             </Group>
             <SimpleGrid

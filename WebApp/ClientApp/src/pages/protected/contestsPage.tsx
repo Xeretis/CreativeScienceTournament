@@ -97,8 +97,8 @@ const ContestsPage = (): JSX.Element => {
 
     return (
         <>
-            <Group position="apart" align="baseline">
-                <Title mb="md">Versenyek</Title>
+            <Group position="apart" align="baseline" mb="md">
+                <Title>Versenyek</Title>
                 <Group spacing="xs" align="flex-start">
                     {isUserAdmin && (
                         <Button onClick={openCreateContestModal}>Verseny létrehozása</Button>
