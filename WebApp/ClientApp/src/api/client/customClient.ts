@@ -33,7 +33,17 @@ export const useCustomClient = <T>(): CustomClient<T> => {
             }
 
             try {
-                return await response.json();
+                if (response.headers.get("Content-Type")?.includes("application/json")) {
+                    return await response.json();
+                }
+                const a = document.createElement("a");
+                const file = window.URL.createObjectURL(await response.blob());
+                a.href = file;
+                const header = response.headers.get("Content-Disposition");
+                const parts = header!.split(";");
+                const filename = parts[1].split("=")[1];
+                a.download = filename;
+                a.click();
             } catch (error) {
                 return;
             }
