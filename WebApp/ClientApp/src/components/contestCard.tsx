@@ -142,7 +142,7 @@ const ViewContestModal = ({ contest, contestsKey }: { contest: IndexContestsResp
 
     return (
         <>
-            <LoadingOverlay visible={user.isLoading || teamStatus.isRefetching} />
+            <LoadingOverlay visible={user.isLoading || teamStatus.isInitialLoading} />
             <Text color="dimmed">{contest.description}</Text>
             <Group position="apart" mb="sm">
                 <Text>{dayjs().isBefore(contest.startDate) ? "Kezdete" : "Vége"}</Text>
