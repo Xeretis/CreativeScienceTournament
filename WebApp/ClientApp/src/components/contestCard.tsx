@@ -136,6 +136,7 @@ const ViewContestModal = ({ contest, contestsKey }: { contest: IndexContestsResp
         if (teamStatus.data && !didSetJoined) {
             setJoined(teamStatus.data.joined);
             setDidSetJoined(true);
+            teamStatus.remove();
         }
     }, [teamStatus.data, didSetJoined, user, isTeamFull, teamStatus]);
 
