@@ -16,6 +16,7 @@ import { showNotification } from "@mantine/notifications";
 import { useForm } from "@mantine/form";
 import { useGetApiAuthUser } from "../api/client/auth/auth";
 import { useIsAdmin } from "../hooks/useIsAdmin";
+import { useIsTeamFull } from "../hooks/useIsTeamFull";
 
 dayjs.extend(relativeTime);
 
@@ -37,11 +38,12 @@ const ViewContestModal = ({ contest, contestsKey }: { contest: IndexContestsResp
 
     const user = useGetApiAuthUser();
     const isAdmin = useIsAdmin(user.data);
+    const isTeamFull = useIsTeamFull(user.data);
 
     const [joined, setJoined] = useState(false);
     const [didSetJoined, setDidSetJoined] = useState(false);
 
-    const teamStatus = useGetApiContestsIdTeamStatus(contest.id);
+    const teamStatus = useGetApiContestsIdTeamStatus(contest.id, { query: { enabled: false } });
 
     const joinContest = usePostApiContestsIdJoin();
     const leaveContest = useDeleteApiContestsIdLeave();
@@ -128,15 +130,18 @@ const ViewContestModal = ({ contest, contestsKey }: { contest: IndexContestsResp
     };
 
     useEffect(() => {
+        if (user.data && !didSetJoined && isTeamFull) {
+            teamStatus.refetch();
+        }
         if (teamStatus.data && !didSetJoined) {
             setJoined(teamStatus.data.joined);
             setDidSetJoined(true);
         }
-    }, [teamStatus.data, didSetJoined]);
+    }, [teamStatus.data, didSetJoined, user, isTeamFull, teamStatus]);
 
     return (
         <>
-            <LoadingOverlay visible={teamStatus.isLoading} />
+            <LoadingOverlay visible={user.isLoading || teamStatus.isRefetching} />
             <Text color="dimmed">{contest.description}</Text>
             <Group position="apart" mb="sm">
                 <Text>{dayjs().isBefore(contest.startDate) ? "Kezdete" : "Vége"}</Text>
