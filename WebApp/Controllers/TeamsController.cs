@@ -162,7 +162,8 @@ public class TeamsController : Controller
 
         if (user.Team == null) return BadRequest(new { Message = "Nem rendelkezel csapattal" });
         if (user.Team.Members.Count >= 3) return BadRequest(new { Message = "A csapatban már 3 tag van" });
-        if (user.Team.CreatorId != user.Id) return Forbid();
+        if (user.Team.CreatorId != user.Id)
+            return BadRequest(new { Message = "Csak a csapat készítője hívhat meg tagot" });
 
         _teamService.SendInviteEmail(user.Team, targetUser, inviteUrl, user.UserName);
 
