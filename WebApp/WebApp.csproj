@@ -1373,6 +1373,7 @@
         <Folder Include="Resources\Exercises" />
         <Folder Include="Resources\Images" />
         <Folder Include="Resources\Solutions" />
+        <Folder Include="Resources\Static" />
     </ItemGroup>
 
     <ItemGroup>

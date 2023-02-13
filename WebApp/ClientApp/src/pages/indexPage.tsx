@@ -1,4 +1,4 @@
-import { Box, Button, Group, Text, Title, createStyles, keyframes, useMantineTheme } from "@mantine/core";
+import { Box, Button, Center, Group, Text, Title, createStyles, keyframes, useMantineTheme } from "@mantine/core";
 
 import { ColorSchemeToggle } from "../components/colorSchemeToggle";
 import { IconAtom } from "@tabler/icons-react";
@@ -18,7 +18,7 @@ const float = keyframes({
 
 const useStyles = createStyles((theme) => ({
     header: {
-        position: "fixed",
+        position: "absolute",
         top: 0,
         left: 0,
         right: 0,
@@ -38,8 +38,12 @@ const useStyles = createStyles((theme) => ({
         alignItems: "center",
         height: "100vh",
     },
+    aboutContainer: {
+        height: "100vh",
+        flexDirection: "column",
+    },
     icon: {
-        position: "fixed",
+        position: "absolute",
         right: "20%",
         bottom: "50%",
         height: "auto",
@@ -57,6 +61,14 @@ const IndexPage = (): JSX.Element => {
     const { classes } = useStyles();
     const theme = useMantineTheme();
 
+    const downloadAbout = async () => {
+        const a = document.createElement("a");
+        const file = window.URL.createObjectURL(await (await fetch(`${document.location.origin}/Static/versenyfelhivas.pdf`)).blob());
+        a.href = file;
+        a.download = "versenyfelhivas.pdf";
+        a.click();
+    };
+
     return (
         <>
             <Box className={classes.header} p="sm">
@@ -72,6 +84,11 @@ const IndexPage = (): JSX.Element => {
                 <Title order={1} className={classes.title}><Text inherit={true} component="span" color={theme.primaryColor}>K</Text>reatív <Text inherit={true} component="span" color={theme.primaryColor}>T</Text>ermészet- <Text inherit={true} component="span" color={theme.primaryColor}>T</Text>udományi <Text inherit={true} component="span" color={theme.primaryColor}>V</Text>etélkedő</Title>
             </Box>
             <IconAtom stroke={1.5} className={classes.icon} />
+            <Center className={classes.aboutContainer} p="xl">
+                <Title order={1} mb="sm">A KTTV-ről</Title>
+                <Text align="center" size="xl" mb="sm">Versenyünkkel szeretnénk lehetőséget adni arra, hogy a tehetséges, illetve a fizika és a kémia iránt érdeklődő diákok új tudást szerezhessenek, a már meglévő tudásukat elmélyíthessék és megmutathassák. A verseny célja továbbá az is, hogy csapatként közösen foglalkozzatok nem feltétlenül csak számítási, vagy tesztkérdésszerű feladatokkal, hanem olyan kreatív feladatokkal is, amelyekben valamilyen kísérletet kell otthon elvégeznetek, valamit ki kell derítenetek, vagy valami egészen más, természettudománnyal kapcsolatos jelenséget kell megfigyelnetek, dokumentálnotok.</Text>
+                <Button variant="outline" onClick={downloadAbout}>Versenyfelhívás letöltése</Button>
+            </Center>
         </>
     );
 };

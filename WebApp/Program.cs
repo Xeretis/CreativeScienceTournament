@@ -59,6 +59,11 @@ app.UseStaticFiles(new StaticFileOptions
     FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), @"Resources/Images")),
     RequestPath = new PathString("/Images")
 });
+app.UseStaticFiles(new StaticFileOptions
+{
+    FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), @"Resources/Static")),
+    RequestPath = new PathString("/Static")
+});
 
 app.UseRouting();
 
