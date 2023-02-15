@@ -1,13 +1,11 @@
 import "dayjs/locale/hu";
 
-import { ActionIcon, Box, Button, Card, FileInput, Group, LoadingOverlay, Text, Title, createStyles } from "@mantine/core";
+import { Box, Button, Card, FileInput, Group, LoadingOverlay, Text, Title, createStyles } from "@mantine/core";
 import { IconCheck, IconChevronRight } from "@tabler/icons-react";
 import { IndexContestsResponse, PostApiContestEntriesContestIdBody } from "../api/client/model";
 import { closeAllModals, openConfirmModal, openModal } from "@mantine/modals";
 import { useDeleteApiContestEntriesContestIdOwn, useGetApiContestEntriesContestIdOwn, usePostApiContestEntriesContestId } from "../api/client/contest-entries/contest-entries";
-import { useEffect, useState } from "react";
 
-import { Link } from "react-router-dom";
 import { ValidationError } from "../utils/api";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
