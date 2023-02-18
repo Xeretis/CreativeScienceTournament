@@ -18,6 +18,7 @@ const UnconfirmedEmailPage = (): JSX.Element => {
         <Center className={classes.container} p="xl">
             <Title align="center">Kérlerk erősítsd meg az e-mail címed!</Title>
             <Text align="center" color="dimmed">Az e-mail cím megerősítése kötelező, hogy elkezdhetsd az oldal használatát! Ha megvagy, gyere vissza és frissíts rá erre az oldalra!</Text>
+            <Text align="center" color="dimmed">(Ha nem találod az e-mailt mindenképp nézd meg a spam mappádat is)</Text>
             <Button variant="outline" mt="lg" onClick={async () => await resendEmail.mutateAsync({ params: {  confirmUrl: `${document.location.origin}/auth/confirmEmail` } })}>Megerősítési link újraküldése</Button>
         </Center>
     );
