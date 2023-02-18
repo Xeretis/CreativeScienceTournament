@@ -1,4 +1,5 @@
 import { handleApiErrors } from "./../../utils/api";
+import { object } from "zod";
 import { useApiStore } from "../../stores/apiStore";
 
 type CustomClient<T> = (data: {
@@ -28,7 +29,12 @@ export const useCustomClient = <T>(): CustomClient<T> => {
             });
 
             if (!response.ok) {
-                const res = { status: response.status, data: await response.json() };
+                let res;
+                try {
+                    res = { status: response.status, data: await response.json() };
+                } catch (error) {
+                    res = { status: response.status, data: {} };
+                }
                 throw res;
             }
 
