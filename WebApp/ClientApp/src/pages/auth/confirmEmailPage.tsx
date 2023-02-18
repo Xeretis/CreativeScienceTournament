@@ -61,7 +61,7 @@ const ConfirmEmailPage = (): JSX.Element => {
         <Center className={classes.container} p="xl">
             <Title align="center">E-mail megerősítése</Title>
             <Text align="center" color="dimmed" mb="xs">Kérlek kattints az alábbi gombra az e-mail címed megerősítéséhez! Az oldal használatához az is szükséges, hogy 5-8. évfolyamok valamelyikébe járj!</Text>
-            <Checkbox label="Megerősítem, hogy az 5-8. évfolyamok valamelyikében járok" mb="lg" checked={gradeConfirmed} onChange={(event) => setGradeConfirmed(event.currentTarget.checked)} error={gradeConfirmedError} />
+            <Checkbox label="Megerősítem, hogy az 5-8. évfolyamok valamelyikébe járok" mb="lg" checked={gradeConfirmed} onChange={(event) => setGradeConfirmed(event.currentTarget.checked)} error={gradeConfirmedError} />
             <Button variant="outline" onClick={confirm}>E-mail cím megerősítése</Button>
         </Center>
     );
