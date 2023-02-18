@@ -1,10 +1,11 @@
-import { Button, Center, Text, Title, createStyles } from "@mantine/core";
+import { Button, Center, Checkbox, Text, Title, createStyles } from "@mantine/core";
 import { IconCheck, IconX } from "@tabler/icons-react";
 
 import { ValidationError } from "../../utils/api";
 import { showNotification } from "@mantine/notifications";
 import { usePostApiAuthConfirmEmail } from "../../api/client/auth/auth";
 import { useSearchParams } from "react-router-dom";
+import { useState } from "react";
 
 const useStyles = createStyles(() => ({
     container: {
@@ -19,8 +20,15 @@ const ConfirmEmailPage = (): JSX.Element => {
     const [params] = useSearchParams();
 
     const confirmEmail = usePostApiAuthConfirmEmail();
+    const [gradeConfirmed, setGradeConfirmed] = useState(false);
+    const [gradeConfirmedError, setGradeConfirmedError] = useState<string | null>(null);
 
     const confirm = async () => {
+        if (!gradeConfirmed) {
+            setGradeConfirmedError("Az évfolyamod megerősítése kötelező");
+            return;
+        }
+        setGradeConfirmedError(null);
         try {
             await confirmEmail.mutateAsync({ params: { token: encodeURIComponent(params.get("token")), userId: params.get("userId") } });
             showNotification({
@@ -52,8 +60,9 @@ const ConfirmEmailPage = (): JSX.Element => {
     return (
         <Center className={classes.container} p="xl">
             <Title align="center">E-mail megerősítése</Title>
-            <Text align="center" color="dimmed">Kérlek kattints az alábbi gombra az e-mail címed megerősítéséhez!</Text>
-            <Button variant="outline" mt="lg" onClick={confirm}>E-mail cím megerősítése</Button>
+            <Text align="center" color="dimmed" mb="xs">Kérlek kattints az alábbi gombra az e-mail címed megerősítéséhez! Az oldal használatához az is szükséges, hogy 5-8. évfolyamok valamelyikébe járj!</Text>
+            <Checkbox label="Megerősítem, hogy az 5-8. évfolyamok valamelyikében járok" mb="lg" checked={gradeConfirmed} onChange={(event) => setGradeConfirmed(event.currentTarget.checked)} error={gradeConfirmedError} />
+            <Button variant="outline" onClick={confirm}>E-mail cím megerősítése</Button>
         </Center>
     );
 };
