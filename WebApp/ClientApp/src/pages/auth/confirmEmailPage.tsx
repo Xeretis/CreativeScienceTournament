@@ -25,7 +25,7 @@ const ConfirmEmailPage = (): JSX.Element => {
 
     const confirm = async () => {
         if (!gradeConfirmed) {
-            setGradeConfirmedError("Az évfolyamod megerősítése kötelező");
+            setGradeConfirmedError("Ezt kötelező megerősítened");
             return;
         }
         setGradeConfirmedError(null);
@@ -60,8 +60,8 @@ const ConfirmEmailPage = (): JSX.Element => {
     return (
         <Center className={classes.container} p="xl">
             <Title align="center">E-mail megerősítése</Title>
-            <Text align="center" color="dimmed" mb="xs">Kérlek kattints az alábbi gombra az e-mail címed megerősítéséhez! Az oldal használatához az is szükséges, hogy 5-8. évfolyamok valamelyikébe járj!</Text>
-            <Checkbox label="Megerősítem, hogy az 5-8. évfolyamok valamelyikébe járok" mb="lg" checked={gradeConfirmed} onChange={(event) => setGradeConfirmed(event.currentTarget.checked)} error={gradeConfirmedError} />
+            <Text align="center" color="dimmed" mb="xs">Kérlek kattints az alábbi gombra az e-mail címed megerősítéséhez! A részvételhez az is szükséges, hogy 5-8. évfolyamok valamelyikébe járj!</Text>
+            <Checkbox label="Tudatában vagyok, hogy csak 5-8. osztályos tanulóként vehetek részt a versenyben" mb="lg" checked={gradeConfirmed} onChange={(event) => setGradeConfirmed(event.currentTarget.checked)} error={gradeConfirmedError} />
             <Button variant="outline" onClick={confirm}>E-mail cím megerősítése</Button>
         </Center>
     );
