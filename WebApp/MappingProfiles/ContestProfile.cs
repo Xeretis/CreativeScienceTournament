@@ -12,7 +12,9 @@ public class ContestProfile : Profile
         CreateMap<Contest, IndexContestsResponse>();
         CreateMap<Contest, ViewContestResponse>();
 
-        CreateMap<CreateContestRequest, Contest>().ForMember(r => r.Exercise, o => o.Ignore());
-        CreateMap<UpdateContestRequest, Contest>().ForMember(r => r.Exercise, o => o.Ignore());
+        CreateMap<CreateContestRequest, Contest>().ForMember(r => r.Exercise, o => o.Ignore())
+            .ForMember(r => r.TopicHelp, o => o.Ignore());
+        CreateMap<UpdateContestRequest, Contest>().ForMember(r => r.Exercise, o => o.Ignore())
+            .ForMember(r => r.TopicHelp, o => o.Ignore());
     }
 }

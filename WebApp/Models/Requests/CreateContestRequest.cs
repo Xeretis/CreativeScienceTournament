@@ -19,6 +19,8 @@ public class CreateContestRequest
     [Required]
     public IFormFile Exercise { get; set; }
 
+    public IFormFile? TopicHelp { get; set; }
+
     [MaxFileSize(4 * 1024 * 1024)]
     [AllowedMimeTypes(new[] { "image/bmp", "image/jpeg", "image/x-png", "image/png", "image/gif" })]
     public IFormFile? Thumbnail { get; set; }

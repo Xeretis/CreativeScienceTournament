@@ -19,6 +19,7 @@ public class ApplicationDbContext : IdentityDbContext<ApiUser>
     protected override void OnModelCreating(ModelBuilder builder)
     {
         builder.Entity<Contest>().OwnsOne<Exercise>(c => c.Exercise);
+        builder.Entity<Contest>().OwnsOne<TopicHelp>(c => c.TopicHelp);
         builder.Entity<ContestEntry>().OwnsOne<Solution>(e => e.Solution);
         builder.Entity<ContestEntry>().OwnsOne<Correction>(e => e.Correction);
 

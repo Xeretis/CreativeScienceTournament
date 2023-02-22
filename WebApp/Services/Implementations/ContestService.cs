@@ -30,6 +30,21 @@ public class ContestService : IContestService
         };
     }
 
+    public async Task<TopicHelp> UploadTopicHelpAsync(IFormFile file)
+    {
+        var uniqueFileName = GetUniqueFileName(file.FileName);
+        var uploads = Path.Combine(Directory.GetCurrentDirectory(), "Resources", "TopicHelp");
+        var filePath = Path.Combine(uploads, uniqueFileName);
+        await file.CopyToAsync(new FileStream(filePath, FileMode.Create));
+
+        return new TopicHelp
+        {
+            Filename = uniqueFileName,
+            OriginalFilename = file.FileName,
+            ContentType = file.ContentType
+        };
+    }
+
     private string GetUniqueFileName(string fileName)
     {
         fileName = Path.GetFileName(fileName);

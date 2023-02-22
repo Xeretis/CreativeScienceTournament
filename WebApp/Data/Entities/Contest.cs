@@ -23,6 +23,7 @@ public class Contest : BaseEntity
     public bool Concluded { get; set; }
 
     [Required] public Exercise Exercise { get; set; }
+    public TopicHelp? TopicHelp { get; set; }
 
     [Required] public int MaxPoints { get; set; }
 

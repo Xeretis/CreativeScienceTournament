@@ -1374,6 +1374,7 @@
         <Folder Include="Resources\Images" />
         <Folder Include="Resources\Solutions" />
         <Folder Include="Resources\Static" />
+        <Folder Include="Resources\TopicHelp" />
     </ItemGroup>
 
     <ItemGroup>

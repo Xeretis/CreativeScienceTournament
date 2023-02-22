@@ -719,6 +719,10 @@
                     "type": "string",
                     "format": "binary"
                   },
+                  "TopicHelp": {
+                    "type": "string",
+                    "format": "binary"
+                  },
                   "Thumbnail": {
                     "type": "string",
                     "format": "binary"
@@ -744,6 +748,9 @@
                   "style": "form"
                 },
                 "Exercise": {
+                  "style": "form"
+                },
+                "TopicHelp": {
                   "style": "form"
                 },
                 "Thumbnail": {
@@ -866,6 +873,10 @@
                     "type": "string",
                     "format": "binary"
                   },
+                  "TopicHelp": {
+                    "type": "string",
+                    "format": "binary"
+                  },
                   "Thumbnail": {
                     "type": "string",
                     "format": "binary"
@@ -891,6 +902,9 @@
                   "style": "form"
                 },
                 "Exercise": {
+                  "style": "form"
+                },
+                "TopicHelp": {
                   "style": "form"
                 },
                 "Thumbnail": {
@@ -1095,6 +1109,50 @@
       }
     },
     "/Api/Contests/{id}/Exercise": {
+      "get": {
+        "tags": [
+          "Contests"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "style": "simple",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/Api/Contests/{id}/TopicHelp": {
       "get": {
         "tags": [
           "Contests"

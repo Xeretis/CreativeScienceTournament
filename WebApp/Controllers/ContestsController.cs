@@ -78,6 +78,12 @@ public class ContestsController : Controller
         var exercise = await _contestService.UploadExerciseAsync(request.Exercise);
         contest.Exercise = exercise;
 
+        if (request.TopicHelp != null)
+        {
+            var topicHelp = await _contestService.UploadTopicHelpAsync(request.TopicHelp);
+            contest.TopicHelp = topicHelp;
+        }
+
         if (request.Thumbnail != null)
         {
             var thumbnailPath = await _contestService.UploadThumbnailAsync(request.Thumbnail);
@@ -110,6 +116,13 @@ public class ContestsController : Controller
             System.IO.File.Delete(Path.Combine("Resources", "Exercises", contest.Exercise.Filename));
             var exercise = await _contestService.UploadExerciseAsync(request.Exercise);
             contest.Exercise = exercise;
+        }
+
+        if (request.TopicHelp != null)
+        {
+            System.IO.File.Delete(Path.Combine("Resources", "TopicHelps", contest.TopicHelp.Filename));
+            var topicHelp = await _contestService.UploadTopicHelpAsync(request.TopicHelp);
+            contest.TopicHelp = topicHelp;
         }
 
         if (request.Thumbnail != null)
@@ -237,5 +250,26 @@ public class ContestsController : Controller
         return File(System.IO.File.OpenRead(Path.Combine("Resources", "Exercises", contest.Exercise.Filename)),
             contest.Exercise.ContentType,
             contest.Exercise.OriginalFilename);
+    }
+
+    [ServiceFilter(typeof(RequireFullTeamActionFilter))]
+    [HttpGet("{id}/TopicHelp")]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    public async Task<ActionResult> DownloadTopicHelp([FromRoute] int id)
+    {
+        var contest = await _dbContext.Contests.Include(c => c.Teams).FirstOrDefaultAsync(c => c.Id == id);
+
+        if (contest?.TopicHelp == null || string.IsNullOrEmpty(contest.TopicHelp.Filename)) return NotFound();
+
+        var user = await _dbContext.Users.FindAsync(User.GetId());
+
+        if (contest.Teams.All(t => t.Id != user.TeamId))
+            return BadRequest(new { Message = "A csapatod nem csatlakozott a versenyhez" });
+
+        return File(System.IO.File.OpenRead(Path.Combine("Resources", "TopicHelp", contest.TopicHelp.Filename)),
+            contest.TopicHelp.ContentType,
+            contest.TopicHelp.OriginalFilename);
     }
 }
