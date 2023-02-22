@@ -63,7 +63,7 @@ const ContestEntriesPage = (): JSX.Element => {
                 ]}
             >
                 {contestEntries.data.map((contestEntry, index) => (
-                    <ContestEntryCard entry={contestEntry} key={contestEntry.id} />
+                    <ContestEntryCard entry={contestEntry} queryKey={contestEntries.queryKey} key={contestEntry.id} />
                 ))}
             </SimpleGrid>
             <Drawer
