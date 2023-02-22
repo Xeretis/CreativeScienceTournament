@@ -1,10 +1,30 @@
 import "dayjs/locale/hu";
 
-import { AspectRatio, BackgroundImage, Badge, Box, Button, Card, FileInput, Group, Image, LoadingOverlay, NumberInput, Text, TextInput, Title, createStyles, useMantineTheme } from "@mantine/core";
+import {
+    AspectRatio,
+    BackgroundImage,
+    Badge,
+    Button,
+    Card,
+    FileInput,
+    Group,
+    LoadingOverlay,
+    NumberInput,
+    Text,
+    TextInput,
+    createStyles,
+    useMantineTheme
+} from "@mantine/core";
 import { IndexContestsResponse, PatchApiContestsIdBody } from "../api/client/model";
 import { QueryKey, useQueryClient } from "@tanstack/react-query";
 import { closeAllModals, openConfirmModal, openModal } from "@mantine/modals";
-import { useDeleteApiContestsId, useDeleteApiContestsIdLeave, useGetApiContestsIdTeamStatus, usePatchApiContestsId, usePostApiContestsIdJoin } from "../api/client/contests/contests";
+import {
+    useDeleteApiContestsId,
+    useDeleteApiContestsIdLeave,
+    useGetApiContestsIdTeamStatus,
+    usePatchApiContestsId,
+    usePostApiContestsIdJoin
+} from "../api/client/contests/contests";
 import { useEffect, useState } from "react";
 
 import { DatePicker } from "@mantine/dates";
@@ -17,6 +37,7 @@ import { useForm } from "@mantine/form";
 import { useGetApiAuthUser } from "../api/client/auth/auth";
 import { useIsAdmin } from "../hooks/useIsAdmin";
 import { useIsTeamFull } from "../hooks/useIsTeamFull";
+import { useNavigate } from "react-router-dom";
 
 dayjs.extend(relativeTime);
 
@@ -31,7 +52,10 @@ const useStyles = createStyles((theme) => ({
     }
 }));
 
-const ViewContestModal = ({ contest, contestsKey }: { contest: IndexContestsResponse, contestsKey: QueryKey }): JSX.Element => {
+const ViewContestModal = ({
+    contest,
+    contestsKey
+}: { contest: IndexContestsResponse, contestsKey: QueryKey }): JSX.Element => {
     const theme = useMantineTheme();
 
     const queryClient = useQueryClient();
@@ -50,6 +74,8 @@ const ViewContestModal = ({ contest, contestsKey }: { contest: IndexContestsResp
     const updateContest = usePatchApiContestsId();
     const deleteContest = useDeleteApiContestsId();
 
+    const navigate = useNavigate();
+
     const form = useForm({
         initialValues: {
             Topic: contest.topic,
@@ -67,7 +93,10 @@ const ViewContestModal = ({ contest, contestsKey }: { contest: IndexContestsResp
         try {
             const StartDate = values.StartDate.toISOString();
             const EndDate = values.EndDate.toISOString();
-            await updateContest.mutateAsync({ id: contest.id, data: { ...values, StartDate, EndDate } as PatchApiContestsIdBody });
+            await updateContest.mutateAsync({
+                id: contest.id,
+                data: { ...values, StartDate, EndDate } as PatchApiContestsIdBody
+            });
             queryClient.invalidateQueries(contestsKey);
             closeAllModals();
         } catch (error) {
@@ -92,7 +121,7 @@ const ViewContestModal = ({ contest, contestsKey }: { contest: IndexContestsResp
             title: "Biztosan törölni szeretnéd a versenyt?",
             children: (
                 <Text size="sm">
-                Biztos, hogy törölni akarod ezt a versenyt? Ez a művelet nem visszavonható.
+                    Biztos, hogy törölni akarod ezt a versenyt? Ez a művelet nem visszavonható.
                 </Text>
             ),
             labels: { confirm: "Verseny törlése", cancel: "Mégse" },
@@ -147,7 +176,8 @@ const ViewContestModal = ({ contest, contestsKey }: { contest: IndexContestsResp
             <Text color="dimmed">{contest.description}</Text>
             <Group position="apart" mb="sm">
                 <Text>{dayjs().isBefore(contest.startDate) ? "Kezdete" : "Vége"}</Text>
-                <Text weight={600}>{dayjs().isBefore(contest.startDate) ? dayjs(contest.startDate).locale("hu").fromNow() : dayjs(contest.endDate).locale("hu").fromNow()}</Text>
+                <Text
+                    weight={600}>{dayjs().isBefore(contest.startDate) ? dayjs(contest.startDate).locale("hu").fromNow() : dayjs(contest.endDate).locale("hu").fromNow()}</Text>
             </Group>
             {isAdmin && (
                 <form onSubmit={submit}>
@@ -156,13 +186,18 @@ const ViewContestModal = ({ contest, contestsKey }: { contest: IndexContestsResp
                     <NumberInput required={true} label="Max pontszám" {...form.getInputProps("MaxPoints")} mb="sm" />
                     <FileInput clearable={true} label="Új feladat" {...form.getInputProps("Exercise")} mb="sm" />
                     <FileInput clearable={true} label="Új segédlet" {...form.getInputProps("TopicHelp")} mb="sm" />
-                    <FileInput clearable={true} label="Új Borítókép" placeholder={contest.thumbnailUrl} {...form.getInputProps("Thumbnail")} mb="sm" />
+                    <FileInput clearable={true} label="Új borítókép"
+                        placeholder={contest.thumbnailUrl} {...form.getInputProps("Thumbnail")} mb="sm" />
                     <DatePicker required={true} label="Kezdés dátuma" {...form.getInputProps("StartDate")} mb="sm" />
                     <DatePicker required={true} label="Befejezés dátuma" {...form.getInputProps("EndDate")} mb="sm" />
                     <Group grow={true} position="apart" mb="sm">
                         <Button fullWidth={true} type="submit">Mentés</Button>
                         <Button fullWidth={true} color="red" onClick={openConfirmDeleteModal}>Verseny törlése</Button>
                     </Group>
+                    <Button fullWidth={true} variant="outline" onClick={() => {
+                        closeAllModals();
+                        navigate(`/contest/${contest.id}/entries`);
+                    }} mb="sm">Megoldások kezelése</Button>
                 </form>
             )}
             <Button fullWidth={true} color={joined ? "red" : theme.primaryColor}
@@ -173,7 +208,10 @@ const ViewContestModal = ({ contest, contestsKey }: { contest: IndexContestsResp
     );
 };
 
-export const ContestCard = ({ contest, contestsKey }: { contest: IndexContestsResponse, contestsKey: QueryKey }): JSX.Element => {
+export const ContestCard = ({
+    contest,
+    contestsKey
+}: { contest: IndexContestsResponse, contestsKey: QueryKey }): JSX.Element => {
     const { classes } = useStyles();
     const theme = useMantineTheme();
 
@@ -189,18 +227,21 @@ export const ContestCard = ({ contest, contestsKey }: { contest: IndexContestsRe
     };
 
     return (
-        <Card onClick={openViewContestModal} className={classes.card} radius="md" shadow="sm" withBorder={theme.colorScheme !== "dark"}>
+        <Card onClick={openViewContestModal} className={classes.card} radius="md" shadow="sm"
+            withBorder={theme.colorScheme !== "dark"}>
             <Card.Section>
                 <AspectRatio ratio={16 / 9}>
                     <BackgroundImage src={contest.thumbnailUrl}>
-                        <Badge className={classes.badge} variant="filled" color={isLive ? "green" : (isBefore ? "yellow" : "red")}>{isLive ? "Folyamatban" : (isBefore ? "Hamarosan" : "Véget ért")}</Badge>
+                        <Badge className={classes.badge} variant="filled"
+                            color={isLive ? "green" : (isBefore ? "yellow" : "red")}>{isLive ? "Folyamatban" : (isBefore ? "Hamarosan" : "Véget ért")}</Badge>
                     </BackgroundImage>
                 </AspectRatio>
             </Card.Section>
             <Card.Section p="sm">
                 <Text size="xl" weight={600} truncate={true}>{contest.topic}</Text>
                 <Text size="sm" color="dimmed" truncate={true}> {contest.description}</Text>
-                <Text size="sm">{dayjs(contest.startDate).format("YYYY. MM. DD.")} - {dayjs(contest.endDate).format("YYYY. MM. DD.")}</Text>
+                <Text
+                    size="sm">{dayjs(contest.startDate).format("YYYY. MM. DD.")} - {dayjs(contest.endDate).format("YYYY. MM. DD.")}</Text>
             </Card.Section>
         </Card>
     );

@@ -31,6 +31,11 @@ const UsersPage = (): JSX.Element => {
                 <Title>Felhasználók</Title>
                 <ActionIcon size="lg" onClick={() => setFilterOpened(!filterOpened)}><IconFilter size={28} color={theme.colorScheme === "dark" ? "white" : "black"} /></ActionIcon>
             </Group>
+            {users.data.length === 0 && (
+                <Text color="dimmed">
+                   Úgy néz ki nincs a keresésednek megfelő felhasználó. Gyere vissza később, hátha akkor lesz.
+                </Text>
+            )}
             <SimpleGrid
                 cols={4}
                 spacing="lg"

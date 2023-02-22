@@ -2,6 +2,7 @@ import { Route, Routes } from "react-router-dom";
 import { Suspense, lazy } from "react";
 
 import { FullScreenLoading } from "../components/fullScreenLoading";
+import { RequireAdmin } from "./helpers/requireAdmin";
 import { RequireAuth } from "./helpers/requireAuth";
 import { RequireConfirmedEmail } from "./helpers/requireConfirmedEmail";
 import { RequireNoAuth } from "./helpers/requireNoAuth";
@@ -21,6 +22,7 @@ export const AppRouter = () => {
     const TeamsPage = lazy(() => import("../pages/protected/teamsPage"));
     const TeamPage = lazy(() => import("../pages/protected/teamPage"));
     const UsersPage = lazy(() => import("../pages/protected/usersPage"));
+    const ContestEntriesPage = lazy(() => import("../pages/protected/admin/contestEntriesPage"));
 
     return (
         <Suspense fallback={<FullScreenLoading />}>
@@ -38,6 +40,9 @@ export const AppRouter = () => {
                             <Route path="/teams" element={<TeamsPage />} />
                             <Route path="/team/:teamId" element={<TeamPage />} />
                             <Route path="/users" element={<UsersPage />} />
+                            <Route element={<RequireAdmin />}>
+                                <Route path="/contest/:id/entries" element={<ContestEntriesPage />} />
+                            </Route>
                         </Route>
                     </Route>
                     <Route element={<RequireUnconfirmedEmail />}>
