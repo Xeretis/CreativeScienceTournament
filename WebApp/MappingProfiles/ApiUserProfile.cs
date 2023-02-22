@@ -13,8 +13,8 @@ public class ApiUserProfile : Profile
         CreateMap<ApiUser, UserResponse>();
         CreateMap<ApiUser, ViewTeamResponseUser>();
         CreateMap<ApiUser, IndexTeamResponseUser>();
-        CreateMap<ApiUser, IndexUsersResponse>();
-        CreateMap<ApiUser, ViewUserResponse>();
+        CreateMap<ApiUser, IndexUsersResponse>().ForMember(r => r.Email, o => o.Ignore());
+        CreateMap<ApiUser, ViewUserResponse>().ForMember(r => r.Email, o => o.Ignore());
         CreateMap<ApiUser, UserResponseTeamUser>();
 
         CreateMap<CreateUserRequest, ApiUser>();

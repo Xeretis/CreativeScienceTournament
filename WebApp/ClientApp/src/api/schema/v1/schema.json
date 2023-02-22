@@ -1879,6 +1879,10 @@
             "type": "string",
             "nullable": true
           },
+          "email": {
+            "type": "string",
+            "nullable": true
+          },
           "teamId": {
             "type": "integer",
             "format": "int32",
@@ -2275,6 +2279,10 @@
             "nullable": true
           },
           "userName": {
+            "type": "string",
+            "nullable": true
+          },
+          "email": {
             "type": "string",
             "nullable": true
           },

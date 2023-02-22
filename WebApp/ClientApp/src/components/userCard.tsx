@@ -25,7 +25,7 @@ const UpdateUserModalContent = ({ user, usersKey }: { user: IndexUsersResponse, 
     const form = useForm<UpdateUserRequest>({
         initialValues: {
             userName: user.userName,
-            email: "",
+            email: user.email ?? "",
             newPassword: "",
             confirmNewPassword: "",
             currentPassword: "",
@@ -70,7 +70,7 @@ const UpdateUserModalContent = ({ user, usersKey }: { user: IndexUsersResponse, 
     return (
         <form onSubmit={submit}>
             <TextInput label="Felhasználónév" required={true} {...form.getInputProps("userName")} mb="sm" />
-            <TextInput label="Új e-mail" {...form.getInputProps("email")} mb="sm" />
+            <TextInput label="E-mail" {...form.getInputProps("email")} mb="sm" />
             <PasswordInput label="Új jelszó" {...form.getInputProps("newPassword")} mb="sm" />
             <PasswordInput label="Új jelszó megerősítése" {...form.getInputProps("confirmNewPassword")} mb="sm" />
             <Button type="submit" fullWidth={true} loading={updateUser.isLoading}>Mentés</Button>

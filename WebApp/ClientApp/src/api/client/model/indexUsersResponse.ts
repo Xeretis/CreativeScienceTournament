@@ -8,5 +8,6 @@
 export interface IndexUsersResponse {
   id?: string | null;
   userName?: string | null;
+  email?: string | null;
   teamId?: number | null;
 }

@@ -42,7 +42,22 @@ public class UsersController : Controller
         var users = _dbContext.Users.Where(u => u.EmailConfirmed).AsNoTracking();
         var filteredUsers = await _sieveProcessor.Apply(sieveModel, users).ToListAsync();
 
-        var response = _mapper.Map<IEnumerable<IndexUsersResponse>>(filteredUsers);
+        List<IndexUsersResponse> response;
+
+        if (User.IsAdmin())
+        {
+            response = new List<IndexUsersResponse>();
+            foreach (var user in filteredUsers)
+            {
+                var mappedUser = _mapper.Map<IndexUsersResponse>(user);
+                mappedUser.Email = user.Email;
+                response.Add(mappedUser);
+            }
+        }
+        else
+        {
+            response = _mapper.Map<List<IndexUsersResponse>>(filteredUsers);
+        }
 
         return Ok(response);
     }
@@ -57,6 +72,8 @@ public class UsersController : Controller
         if (user == null) return NotFound();
 
         var response = _mapper.Map<ViewUserResponse>(user);
+
+        if (User.IsAdmin()) response.Email = user.Email;
 
         return Ok(response);
     }
