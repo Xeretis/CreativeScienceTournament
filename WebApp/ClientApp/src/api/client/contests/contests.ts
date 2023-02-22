@@ -85,6 +85,9 @@ formData.append('Topic', postApiContestsBody.Topic)
 formData.append('Description', postApiContestsBody.Description)
 formData.append('MaxPoints', postApiContestsBody.MaxPoints.toString())
 formData.append('Exercise', postApiContestsBody.Exercise)
+if(postApiContestsBody.TopicHelp !== undefined) {
+ formData.append('TopicHelp', postApiContestsBody.TopicHelp)
+ }
 if(postApiContestsBody.Thumbnail !== undefined) {
  formData.append('Thumbnail', postApiContestsBody.Thumbnail)
  }
@@ -182,6 +185,9 @@ formData.append('Description', patchApiContestsIdBody.Description)
 formData.append('MaxPoints', patchApiContestsIdBody.MaxPoints.toString())
 if(patchApiContestsIdBody.Exercise !== undefined) {
  formData.append('Exercise', patchApiContestsIdBody.Exercise)
+ }
+if(patchApiContestsIdBody.TopicHelp !== undefined) {
+ formData.append('TopicHelp', patchApiContestsIdBody.TopicHelp)
  }
 if(patchApiContestsIdBody.Thumbnail !== undefined) {
  formData.append('Thumbnail', patchApiContestsIdBody.Thumbnail)
@@ -421,6 +427,51 @@ export const useGetApiContestsIdExercise = <TData = Awaited<ReturnType<ReturnTyp
   
 
   const query = useQuery<Awaited<ReturnType<ReturnType<typeof useGetApiContestsIdExerciseHook>>>, TError, TData>(queryKey, queryFn, {enabled: !!(id), ...queryOptions}) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  query.queryKey = queryKey;
+
+  return query;
+}
+
+export const useGetApiContestsIdTopicHelpHook = () => {
+        const getApiContestsIdTopicHelp = useCustomClient<void>();
+
+        return (
+    id: number,
+ signal?: AbortSignal
+) => {
+        return getApiContestsIdTopicHelp(
+          {url: `/Api/Contests/${id}/TopicHelp`, method: 'get', signal
+    },
+          );
+        }
+      }
+    
+
+export const getGetApiContestsIdTopicHelpQueryKey = (id: number,) => [`/Api/Contests/${id}/TopicHelp`];
+
+    
+export type GetApiContestsIdTopicHelpQueryResult = NonNullable<Awaited<ReturnType<ReturnType<typeof useGetApiContestsIdTopicHelpHook>>>>
+export type GetApiContestsIdTopicHelpQueryError = ErrorType<ProblemDetails>
+
+export const useGetApiContestsIdTopicHelp = <TData = Awaited<ReturnType<ReturnType<typeof useGetApiContestsIdTopicHelpHook>>>, TError = ErrorType<ProblemDetails>>(
+ id: number, options?: { query?:UseQueryOptions<Awaited<ReturnType<ReturnType<typeof useGetApiContestsIdTopicHelpHook>>>, TError, TData>, }
+
+  ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } => {
+
+  const {query: queryOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetApiContestsIdTopicHelpQueryKey(id);
+
+  const getApiContestsIdTopicHelp =  useGetApiContestsIdTopicHelpHook();
+
+
+  const queryFn: QueryFunction<Awaited<ReturnType<ReturnType<typeof useGetApiContestsIdTopicHelpHook>>>> = ({ signal }) => getApiContestsIdTopicHelp(id, signal);
+
+
+  
+
+  const query = useQuery<Awaited<ReturnType<ReturnType<typeof useGetApiContestsIdTopicHelpHook>>>, TError, TData>(queryKey, queryFn, {enabled: !!(id), ...queryOptions}) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
 
   query.queryKey = queryKey;
 

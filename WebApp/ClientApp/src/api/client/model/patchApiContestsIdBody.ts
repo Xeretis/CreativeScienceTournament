@@ -10,6 +10,7 @@ export type PatchApiContestsIdBody = {
   Description: string;
   MaxPoints: number;
   Exercise?: Blob;
+  TopicHelp?: Blob;
   Thumbnail?: Blob;
   StartDate: string;
   EndDate: string;

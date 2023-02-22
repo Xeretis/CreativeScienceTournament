@@ -55,8 +55,9 @@ const ViewContestModal = ({ contest, contestsKey }: { contest: IndexContestsResp
             Topic: contest.topic,
             Description: contest.description,
             MaxPoints: 0,
-            Exercise: null,
-            Thumbnail: null,
+            Exercise: undefined,
+            TopicHelp: undefined,
+            Thumbnail: undefined,
             StartDate: new Date(contest.startDate),
             EndDate: new Date(contest.endDate),
         },
@@ -154,6 +155,7 @@ const ViewContestModal = ({ contest, contestsKey }: { contest: IndexContestsResp
                     <TextInput label="Leírás" {...form.getInputProps("Description")} mb="sm" />
                     <NumberInput required={true} label="Max pontszám" {...form.getInputProps("MaxPoints")} mb="sm" />
                     <FileInput clearable={true} label="Új feladat" {...form.getInputProps("Exercise")} mb="sm" />
+                    <FileInput clearable={true} label="Új segédlet" {...form.getInputProps("TopicHelp")} mb="sm" />
                     <FileInput clearable={true} label="Új Borítókép" placeholder={contest.thumbnailUrl} {...form.getInputProps("Thumbnail")} mb="sm" />
                     <DatePicker required={true} label="Kezdés dátuma" {...form.getInputProps("StartDate")} mb="sm" />
                     <DatePicker required={true} label="Befejezés dátuma" {...form.getInputProps("EndDate")} mb="sm" />

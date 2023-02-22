@@ -5,13 +5,13 @@ import { IconCheck, IconChevronRight } from "@tabler/icons-react";
 import { IndexContestsResponse, PostApiContestEntriesContestIdBody } from "../api/client/model";
 import { closeAllModals, openConfirmModal, openModal } from "@mantine/modals";
 import { useDeleteApiContestEntriesContestIdOwn, useGetApiContestEntriesContestIdOwn, usePostApiContestEntriesContestId } from "../api/client/contest-entries/contest-entries";
+import { useGetApiContestsIdExercise, useGetApiContestsIdTopicHelp } from "../api/client/contests/contests";
 
 import { ValidationError } from "../utils/api";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import { showNotification } from "@mantine/notifications";
 import { useForm } from "@mantine/form";
-import { useGetApiContestsIdExercise } from "../api/client/contests/contests";
 
 dayjs.extend(relativeTime);
 
@@ -26,6 +26,7 @@ const useStyles = createStyles((theme) => ({
 
 const ViewJoinedContestModalContent = ({ contest }: { contest: IndexContestsResponse }): JSX.Element => {
     const downloadExercise = useGetApiContestsIdExercise(contest.id, { query: { enabled: false } });
+    const downloadTopicHelp = useGetApiContestsIdTopicHelp(contest.id, { query: { enabled: false } });
     const ownSolution = useGetApiContestEntriesContestIdOwn(contest.id, { query: { retry: false } });
 
     const createSolution = usePostApiContestEntriesContestId();
@@ -34,6 +35,11 @@ const ViewJoinedContestModalContent = ({ contest }: { contest: IndexContestsResp
     const downloadExerciseFile = () => {
         downloadExercise.refetch();
         downloadExercise.remove();
+    };
+
+    const downloadTopicHelpFile = () => {
+        downloadTopicHelp.refetch();
+        downloadTopicHelp.remove();
     };
 
     const form = useForm({
@@ -95,6 +101,7 @@ const ViewJoinedContestModalContent = ({ contest }: { contest: IndexContestsResp
             <LoadingOverlay visible={ownSolution.isLoading} />
             <Text color="dimmed" mb="sm">{contest.description}</Text>
             <Button fullWidth={true} onClick={downloadExerciseFile} mb="sm">Feladat letöltése</Button>
+            <Button fullWidth={true} variant="outline" onClick={downloadTopicHelpFile} mb="sm">Segédlet letöltése</Button>
             {ownSolution.data ? (
                 <Button fullWidth={true} color="red" onClick={openConfirmDeleteModal}>Megoldás törlése</Button>
             ) : (

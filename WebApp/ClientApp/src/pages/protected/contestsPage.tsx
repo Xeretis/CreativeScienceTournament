@@ -27,8 +27,9 @@ const CreateContestModalContent = ({ contestsKey }: { contestsKey: QueryKey }): 
             Topic: "",
             Description: "",
             MaxPoints: 0,
-            Exercise: null,
-            Thumbnail: null,
+            Exercise: undefined,
+            TopicHelp: undefined,
+            Thumbnail: undefined,
             StartDate: new Date(),
             EndDate: new Date(),
         },
@@ -64,6 +65,7 @@ const CreateContestModalContent = ({ contestsKey }: { contestsKey: QueryKey }): 
             <TextInput required={true} label="Leírás" {...form.getInputProps("Description")} mb="sm" />
             <NumberInput required={true} label="Max pontszám" {...form.getInputProps("MaxPoints")} mb="sm" />
             <FileInput required={true} label="Feladat" {...form.getInputProps("Exercise")} mb="sm" />
+            <FileInput required={true} label="Segédlet" {...form.getInputProps("TopicHelp")} mb="sm" />
             <FileInput clearable={true} label="Borítókép" {...form.getInputProps("Thumbnail")} mb="sm" />
             <DatePicker required={true} label="Kezdés dátuma" {...form.getInputProps("StartDate")} mb="sm" />
             <DatePicker required={true} label="Befejezés dátuma" {...form.getInputProps("EndDate")} mb="sm" />
