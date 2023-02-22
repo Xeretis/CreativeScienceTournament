@@ -168,13 +168,16 @@ public class ContestEntriesController : Controller
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     public async Task<ActionResult> DeleteOwnContestEntry([FromRoute] int contestId)
     {
-        var user = await _dbContext.Users.FindAsync(User.GetId());
+        var user = await _dbContext.Users.Include(u => u.Team).FirstOrDefaultAsync(u => u.Id == User.GetId());
 
         var contestEntry =
             await _dbContext.ContestEntries.FirstOrDefaultAsync(
                 c => c.ContestId == contestId && c.TeamId == user.TeamId);
 
         if (contestEntry == null) return NotFound();
+
+        if (user.Team.CreatorId != user.Id)
+            return BadRequest(new { Message = "Csak a csapat létrehozója törölhet megoldást" });
 
         _dbContext.ContestEntries.Remove(contestEntry);
         await _dbContext.SaveChangesAsync();
