@@ -1,12 +1,12 @@
 import { Box, Button, Group, SimpleGrid, Text, TextInput, Title, createStyles, useMantineTheme } from "@mantine/core";
 import { QueryKey, useQueryClient } from "@tanstack/react-query";
+import { UpdateTeamRequest, ViewTeamResponse } from "../../api/client/model";
 import { closeAllModals, openConfirmModal, openModal } from "@mantine/modals";
 import { useDeleteApiTeamsId, useGetApiTeamsId, usePatchApiTeamsId } from "../../api/client/teams/teams";
 import { useNavigate, useParams } from "react-router-dom";
 
 import { FullScreenLoading } from "../../components/fullScreenLoading";
 import { TeamMemberCard } from "../../components/teamMemberCard";
-import { UpdateTeamRequest } from "../../api/client/model";
 import { ValidationError } from "../../utils/api";
 import { camelize } from "../../utils/string";
 import { useForm } from "@mantine/form";
@@ -34,20 +34,20 @@ const useStyles = createStyles((theme) => ({
     },
 }));
 
-const UpdateTeamModalContent = ({ teamId, teamKey }: { teamId: number, teamKey: QueryKey }): JSX.Element => {
+const UpdateTeamModalContent = ({ team, teamKey }: { team: ViewTeamResponse, teamKey: QueryKey }): JSX.Element => {
     const queryClient = useQueryClient();
 
     const updateTeam = usePatchApiTeamsId();
 
     const form = useForm<UpdateTeamRequest>({
         initialValues: {
-            name: "",
+            name: team.name,
         },
     });
 
     const submit = form.onSubmit(async (values) => {
         try {
-            await updateTeam.mutateAsync({ id: teamId, data: values });
+            await updateTeam.mutateAsync({ id: team.id, data: values });
             queryClient.invalidateQueries(teamKey);
             closeAllModals();
         } catch (error) {
@@ -113,7 +113,7 @@ export const TeamPage = (): JSX.Element => {
         openModal({
             title: "Csapat módosítása",
             size: "lg",
-            children: <UpdateTeamModalContent teamId={team.data.id} teamKey={team.queryKey} />,
+            children: <UpdateTeamModalContent team={team.data} teamKey={team.queryKey} />,
         });
     };
 
