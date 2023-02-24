@@ -1,7 +1,7 @@
-import { Box, Button, Center, Group, Text, Title, createStyles, keyframes, useMantineTheme } from "@mantine/core";
+import { ActionIcon, Box, Button, Center, Group, Text, Title, createStyles, keyframes, useMantineTheme } from "@mantine/core";
+import { IconAtom, IconBrandGithub } from "@tabler/icons-react";
 
 import { ColorSchemeToggle } from "../components/colorSchemeToggle";
-import { IconAtom } from "@tabler/icons-react";
 import { Link } from "react-router-dom";
 
 const float = keyframes({
@@ -41,6 +41,7 @@ const useStyles = createStyles((theme) => ({
     aboutContainer: {
         height: "100vh",
         flexDirection: "column",
+        position: "relative",
     },
     icon: {
         position: "absolute",
@@ -54,6 +55,11 @@ const useStyles = createStyles((theme) => ({
         [`@media (max-width: ${theme.breakpoints.sm}px)`]: {
             display: "none",
         }
+    },
+    githubIcon: {
+        position: "absolute",
+        bottom: theme.spacing.sm,
+        right: theme.spacing.sm,
     }
 }));
 
@@ -88,6 +94,9 @@ const IndexPage = (): JSX.Element => {
                 <Title order={1} mb="sm">A KTTV-ről</Title>
                 <Text align="center" size="xl" mb="sm">Versenyünkkel szeretnénk lehetőséget adni arra, hogy a tehetséges, illetve a fizika és a kémia iránt érdeklődő diákok új tudást szerezhessenek, a már meglévő tudásukat elmélyíthessék és megmutathassák. A verseny célja továbbá az is, hogy csapatként közösen foglalkozzatok nem feltétlenül csak számítási, vagy tesztkérdésszerű feladatokkal, hanem olyan kreatív feladatokkal is, amelyekben valamilyen kísérletet kell otthon elvégeznetek, valamit ki kell derítenetek, vagy valami egészen más, természettudománnyal kapcsolatos jelenséget kell megfigyelnetek, dokumentálnotok.</Text>
                 <Button variant="outline" onClick={downloadAbout}>Versenyfelhívás letöltése</Button>
+                <ActionIcon className={classes.githubIcon} component="a" href="https://github.com/Xeretis/CreativeScienceTournament" target="_blank" variant="transparent">
+                    <IconBrandGithub size={48} />
+                </ActionIcon>
             </Center>
         </>
     );
