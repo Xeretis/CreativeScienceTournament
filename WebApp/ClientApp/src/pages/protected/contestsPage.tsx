@@ -1,3 +1,5 @@
+import "dayjs/locale/hu";
+
 import { ActionIcon, Box, Button, Drawer, FileInput, Group, NumberInput, SimpleGrid, Text, TextInput, Title, createStyles, useMantineTheme } from "@mantine/core";
 import { QueryKey, useQueryClient } from "@tanstack/react-query";
 import { closeAllModals, openModal } from "@mantine/modals";
@@ -67,8 +69,8 @@ const CreateContestModalContent = ({ contestsKey }: { contestsKey: QueryKey }): 
             <FileInput required={true} label="Feladat" {...form.getInputProps("Exercise")} mb="sm" />
             <FileInput required={true} label="Segédlet" {...form.getInputProps("TopicHelp")} mb="sm" />
             <FileInput clearable={true} label="Borítókép" {...form.getInputProps("Thumbnail")} mb="sm" />
-            <DatePicker required={true} label="Kezdés dátuma" {...form.getInputProps("StartDate")} mb="sm" />
-            <DatePicker required={true} label="Befejezés dátuma" {...form.getInputProps("EndDate")} mb="sm" />
+            <DatePicker locale="hu" required={true} styles={{ weekday: { textTransform: "lowercase" } }} label="Kezdés dátuma" {...form.getInputProps("StartDate")} mb="sm" />
+            <DatePicker locale="hu" required={true} styles={{ weekday: { textTransform: "lowercase" } }} label="Befejezés dátuma" {...form.getInputProps("EndDate")} mb="sm" />
             <Button type="submit">Létrehozás</Button>
         </form>
     );

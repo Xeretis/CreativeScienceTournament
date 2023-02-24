@@ -188,8 +188,8 @@ const ViewContestModal = ({
                     <FileInput clearable={true} label="Új segédlet" {...form.getInputProps("TopicHelp")} mb="sm" />
                     <FileInput clearable={true} label="Új borítókép"
                         placeholder={contest.thumbnailUrl} {...form.getInputProps("Thumbnail")} mb="sm" />
-                    <DatePicker required={true} label="Kezdés dátuma" {...form.getInputProps("StartDate")} mb="sm" />
-                    <DatePicker required={true} label="Befejezés dátuma" {...form.getInputProps("EndDate")} mb="sm" />
+                    <DatePicker locale="hu" required={true} styles={{ weekday: { textTransform: "lowercase" } }} label="Kezdés dátuma" {...form.getInputProps("StartDate")} mb="sm" />
+                    <DatePicker locale="hu" required={true} styles={{ weekday: { textTransform: "lowercase" } }} label="Befejezés dátuma" {...form.getInputProps("EndDate")} mb="sm" />
                     <Group grow={true} position="apart" mb="sm">
                         <Button fullWidth={true} type="submit">Mentés</Button>
                         <Button fullWidth={true} color="red" onClick={openConfirmDeleteModal}>Verseny törlése</Button>
