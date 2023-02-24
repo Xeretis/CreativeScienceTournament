@@ -2,7 +2,7 @@
 
 ## Magyar
 
-A [KTTV](https://web.kttv.xyz) verseny hivatalos webalkalmazásáank forráskódja.
+A [KTTV](https://web.kttv.xyz) verseny hivatalos webalkalmazásának forráskódja.
 
 ### A KTTV-ről
 
